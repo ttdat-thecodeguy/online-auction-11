@@ -1,0 +1,47 @@
+{
+	"knex-init": {
+		"prefix": "knex-$",
+		"body": [
+		  "module.exports = require('knex')({",
+		  "  client: 'mysql2',",
+		  "  connection: {",
+		  "    host: 'your host',",
+		  "    port: 3000,",
+		  "    user: 'root',",
+		  "    password: 'root',",
+		  "    database: 'database'",
+		  "  },",
+		  "  pool: { min: 0, max: 50 }",
+		  "});",
+		  ""
+		],
+		"description": "knex-init"
+	  },
+	  "knex-crud-default": {
+		"prefix": "knex-crud",
+		"body": [
+		  "const db = require('../utils/db');",
+		  "",
+		  "module.exports = {",
+		  "  findAll() {",
+		  "    return db(table);",
+		  "  },",
+		  "  add(object) {",
+		  "    return db(table).insert(object);",
+		  "  },",
+		  "  del(condition) {",
+		  "    return db(table)",
+		  "      .where(condition_name, condition)",
+		  "      .del();",
+		  "  },",
+		  "  updater(condition, object) {",
+		  "    return db(table)",
+		  "      .where(condition_name, condition)",
+		  "      .update(object);",
+		  "  }",
+		  "};",
+		  ""
+		],
+		"description": "knex-crud-default"
+	  }
+}
