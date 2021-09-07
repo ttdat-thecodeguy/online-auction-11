@@ -34,7 +34,7 @@
 		  "      .where(condition_name, condition)",
 		  "      .del();",
 		  "  },",
-		  "  updater(condition, object) {",
+		  "  update(condition, object) {",
 		  "    return db(table)",
 		  "      .where(condition_name, condition)",
 		  "      .update(object);",

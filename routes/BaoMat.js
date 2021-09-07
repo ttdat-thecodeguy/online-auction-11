@@ -85,7 +85,37 @@ router.post('/dang-ki/activation', async function (req, res) {
     })
   }
 })
+router.post('/dang-nhap', async (req, res) => {
+  const acc = await taiKhoanModel.findByEmail(req.body.email)
+  if(acc != null){
+    if (bcrypt.compareSync(req.body.mat_khau, acc.mat_khau) === false) {
+      return res.status(401).json({
+        messeage: "password is wrong",
+        authentication: false
+      });
+    }
 
+    const payload = { id: acc.id_nguoi_dung }
+    const opts = {
+      expiresIn: 24 * 60 * 60 // seconds
+    }
+    const accessToken = jwt.sign(payload, 'SECRET_KEY', opts);
+
+    delete acc.OTP
+
+    return res.status(200).json({
+      token: accessToken,
+      user: acc
+    })
+
+
+  } else{
+    res.status(401).json({
+      messeage: "user not found",
+      authentication: false
+    })
+  }
+})
 
 
 module.exports = router;
