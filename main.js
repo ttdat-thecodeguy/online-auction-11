@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 require('express-async-errors');
 const app = express();
-
+const auth = require('./middlewares/auth');
 app.use(cors());
 
 app.use(morgan('dev'));
@@ -18,7 +18,8 @@ app.use(
     swaggerUi.serve, 
     swaggerUi.setup(swaggerDocument)
   );
-app.use('/api/account', require('./routes/Account'));
+app.use('/', require('./routes/BaoMat'));
+app.use('/api/tai-khoan', auth, require('./routes/TaiKhoan'))
 
 const PORT = process.env.PORT || 5000;
 
