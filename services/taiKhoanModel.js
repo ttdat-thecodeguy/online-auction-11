@@ -27,13 +27,6 @@ module.exports = {
     }
     return rows[0];
   },
-  resetOTP (id) {
-    return db(table)
-    .where("id_nguoi_dung", id)
-      .update({
-        OTP: null
-      });
-  },
   add(taikhoan) {
     return db(table).insert(taikhoan);
   },
@@ -46,5 +39,33 @@ module.exports = {
     return db(table)
       .where("id_nguoi_dung", id)
       .update(taikhoan);
+  },
+  updateMatKhau(id, mat_khau){
+    return db(table)
+      .where("id_nguoi_dung", id)
+      .update({
+        mat_khau
+      });
+  },
+  updateOTP (id, OTP) {
+    return db(table)
+    .where("id_nguoi_dung", id)
+      .update({
+        OTP
+      });
+  },
+  /*
+    Họ tên
+    Email liên lạc
+    Ngày tháng năm sinh
+  */
+  updateInfo(id, account){
+    return db(table)
+    .where("id_nguoi_dung", id)
+      .update({
+        email: account.email,
+        ho_ten: account.ho_ten,
+        ngay_sinh: account.ngay_sinh
+      });
   }
 };

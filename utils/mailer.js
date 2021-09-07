@@ -21,5 +21,4 @@ module.exports ={
             console.log('mail sent:', info.response);
         });
     }
-   
 };
