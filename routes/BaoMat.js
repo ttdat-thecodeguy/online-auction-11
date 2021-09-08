@@ -99,7 +99,7 @@ router.post("/dang-nhap", async (req, res) => {
     const accessToken = jwt.sign(payload, "SECRET_KEY", opts);
 
     delete acc.OTP;
-    delete user.mat_khau;
+    delete acc.mat_khau;
     return res.status(200).json({
       token: accessToken,
       user: acc,
