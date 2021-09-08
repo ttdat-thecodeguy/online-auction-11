@@ -84,7 +84,7 @@ router.post("/dang-ki/activation", async function (req, res) {
 });
 router.post("/dang-nhap", async (req, res) => {
   const acc = await taiKhoanModel.findByEmail(req.body.email);
-  if (acc != null) {
+  if (acc != null && acc.OTP == null) {
     if (bcrypt.compareSync(req.body.mat_khau, acc.mat_khau) === false) {
       return res.status(401).json({
         messeage: "password is wrong",
@@ -106,7 +106,7 @@ router.post("/dang-nhap", async (req, res) => {
     });
   } else {
     res.status(401).json({
-      messeage: "user not found",
+      messeage: "user not found or invalid",
       authentication: false,
     });
   }

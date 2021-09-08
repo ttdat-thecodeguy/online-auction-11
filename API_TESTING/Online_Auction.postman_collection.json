@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "6c7510aa-d4f7-478a-b270-892a5204244f",
+		"name": "Online_Auction",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Bảo Mật (Không cần token)",
+			"item": [
+				{
+					"name": "Đăng Kí",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"gahowa2784@posiklan.com\",\r\n    \"ho_ten\": \"adminstrator\",\r\n    \"dia_chi\":\"123 hung vuong\",\r\n    \"mat_khau\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://online-auction-11.herokuapp.com/dang-ki",
+							"protocol": "https",
+							"host": [
+								"online-auction-11",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"dang-ki"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Nhập OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"otp\": 447629\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/dang-ki/activation",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"dang-ki",
+								"activation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Đăng Nhập",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"nijigi1129@rebation.com\",\r\n    \"mat_khau\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://online-auction-11.herokuapp.com/dang-nhap",
+							"protocol": "https",
+							"host": [
+								"online-auction-11",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"dang-nhap"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Người Dùng (Cần Token)",
+			"item": [
+				{
+					"name": "Thông Tin Tài Khoản",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjMxMDYxMDQ3LCJleHAiOjE2MzExNDc0NDd9.J8sJOaGgfhjrGwY4NO_idDkkGeIqD8aLmkFEMHgngRw",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://online-auction-11.herokuapp.com/api/tai-khoan/details",
+							"protocol": "https",
+							"host": [
+								"online-auction-11",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"tai-khoan",
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập Nhật Tài Khoản",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjMxMDEyMzg2LCJleHAiOjE2MzEwOTg3ODZ9.crSNvs3XvXyG4DvNzu8HLUP09HzcPUsIpTrb0Ggf2cY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ho_ten\":\"John Henry\",\r\n    \"email\": \"nijigi1129@rebation.com\",\r\n    \"ngay_sinh\": \"2019-07-04\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://online-auction-11.herokuapp.com/api/tai-khoan/cap-nhat",
+							"protocol": "https",
+							"host": [
+								"online-auction-11",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"tai-khoan",
+								"cap-nhat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Đổi Mật Khẩu",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjMxMDEyMzg2LCJleHAiOjE2MzEwOTg3ODZ9.crSNvs3XvXyG4DvNzu8HLUP09HzcPUsIpTrb0Ggf2cY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mat_khau_cu\":\"12345\",\r\n    \"mat_khau_moi\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://online-auction-11.herokuapp.com/api/tai-khoan/doi-mat-khau",
+							"protocol": "https",
+							"host": [
+								"online-auction-11",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"tai-khoan",
+								"doi-mat-khau"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
