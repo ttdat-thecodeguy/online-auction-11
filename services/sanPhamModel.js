@@ -22,7 +22,6 @@ function mapProduct() {
         "danh_muc.cap_danh_muc"
       );
 }
-
 module.exports = {
   findAll() {
     return db(table);
@@ -36,6 +35,18 @@ module.exports = {
   findById(id) {
     return mapProduct().where("id_sp", id)     
   },
+  findByName(name){
+    return mapProduct().where("ten", "LIKE" ,"%" + name + "%")
+  },
+  findByCate(id_cate){
+    return mapProduct().where("danh_muc.id_danh_muc", id_cate)
+  },
+  findByCateWithPaging(id_cate, offset, per_page){
+    return mapProduct().where("danh_muc.id_danh_muc", id_cate).offset(offset).limit(per_page);
+  },
+  countProduct(){
+    return db("san_pham").count('* as count')
+  },  
   add(sanpham) {
     return db(table).insert(sanpham);
   },

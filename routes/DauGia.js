@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async function (req, res) {
+router.get('/tham-gia', async function (req, res) {
   
 })
 

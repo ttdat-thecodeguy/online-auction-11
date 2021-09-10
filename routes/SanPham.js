@@ -22,21 +22,68 @@ const Utils = require('../utils/Utils')
 //     res.send(publicIds);
 // });
 
- function mapProduct(product, id, anh) {
-    if(product.cap_danh_muc == 0) product.cap_danh_muc = "Điện thoại";
-    else product.cap_danh_muc = "Máy tính";
 
-    product.danh_muc =  {
-        id : product.id_danh_muc,
-        ten : product.ten_danh_muc
+
+////// search
+//Tìm Kiếm Theo tên sản phẩm hoặc danh mục
+
+router.get('/tim-kiem', async (req, res)=>{
+    let name = req.query.name;
+    let cate = req.query.cate;
+    let product = null;
+    if(name != null && cate == null) product = await sanPhamModel.findByName(name)
+    else if(cate != null && name == null) product = await sanPhamModel.findByCate(parseInt(cate))
+    else if(name == null && cate == null) {
+        res.json({
+            messeage: "no condition query"
+        }).status(500)
+    }else{
+        res.json({
+            messeage: "name or cate query"
+        }).status(500)
     }
-    product.anh_phu = anh
-    delete product.id_danh_muc
-    delete product.ten_danh_muc
+    let arr_product = []
+    for(let i = 0;i < product.length;i++){
+        let anh = await sanPhamModel.findImageById(product[i].id_sp)
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
+    }
+    return res.json(arr_product)
+})
 
-    product.path = Utils.toPath(product.ten_sp, id);
-    return product
-}
+router.get('/sap-xep', async (req, res) =>{
+    let time = req.query.time
+    let price = req.query.price
+    let product = null;
+    if(time == null && price == null){
+        res.json({
+            messeage: "no condition query"
+        }).status(500)
+    }
+
+    else if(time != null && price == null){
+        product = await sanPhamModel.filterSanPham("end_date", "desc", Number.MAX_SAFE_INTEGER)
+    }
+    ///cần hỏi thầy là giá nào
+    else if(time == null && price != null){
+        product = await sanPhamModel.filterSanPham("gia_dat", "asc", Number.MAX_SAFE_INTEGER)
+    }
+
+    else {
+        return res.json({
+            messeage: "time or price query"
+        })
+    }
+    let arr_product = []
+    for(let i = 0;i < product.length;i++){
+        let anh = await sanPhamModel.findImageById(product[i].id_sp)
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
+    }
+    return res.json(arr_product)
+})
+
+
+
+///// get details
 
 router.get('/details/:name', async (req, res) => {
     let id = req.params.name.split("-")[0] || 0;
@@ -48,7 +95,7 @@ router.get('/details/:name', async (req, res) => {
         }).status(404)
     }
     let anh = await sanPhamModel.findImageById(id)
-    product =  mapProduct(product[0], id, anh)
+    product =  Utils.mapProduct(product[0], id, anh)
     return res.json(product)
 })
 
@@ -68,7 +115,7 @@ router.get("/5-san-pham-gan-ket-thuc", async (req, res)=>{
 })
 
 router.get("/5-san-pham-nhieu-luot-ra-gia", async (req, res)=>{
-    let product = await sanPhamModel.filterSanPham("end_date","asc",5)
+    let product = await sanPhamModel.filterSanPham("luot_daugia","desc",5)
     if(product == null || product.length == 0){
         return res.json({
             messeage: "product not found"
@@ -77,13 +124,13 @@ router.get("/5-san-pham-nhieu-luot-ra-gia", async (req, res)=>{
     let arr_product = []
     for(let i = 0;i < product.length;i++){
         let anh = await sanPhamModel.findImageById(product[i].id_sp)
-        arr_product.push(mapProduct(product[i], product[i].id_sp, anh))
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
     }
     return res.json(arr_product)
 })
 
 router.get("/5-san-pham-gia-cao-nhat", async (req, res)=>{
-    let product = await sanPhamModel.filterSanPham("end_date","asc",5)
+    let product = await sanPhamModel.filterSanPham("gia_dat","desc",5)
     if(product == null || product.length == 0){
         return res.json({
             messeage: "product not found"
@@ -92,10 +139,12 @@ router.get("/5-san-pham-gia-cao-nhat", async (req, res)=>{
     let arr_product = []
     for(let i = 0;i < product.length;i++){
         let anh = await sanPhamModel.findImageById(product[i].id_sp)
-        arr_product.push(mapProduct(product[i], product[i].id_sp, anh))
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
     }
     return res.json(arr_product)
 })
+
+//// CRUD
 
 router.post('/them-san-pham',[upload.any(), Authentiaction.requireUser, Authentiaction.requireSeller],async (req, res)=>{
     const product = req.body;
@@ -116,6 +165,13 @@ router.post('/them-san-pham',[upload.any(), Authentiaction.requireUser, Authenti
         })
     }
     product.id_nguoi_ban = id_nguoi_ban
+
+    if(product.isGiaHan == 1) {
+        let end_date = new Date(product.end_date);
+        end_date = new Date(end_date.getTime() + 10*60000);
+        product.end_date = end_date
+    }
+
     const result = await sanPhamModel.add(product)
     try{
         for(let i = 0;i < req.files.length;i++){
@@ -136,7 +192,6 @@ router.post('/them-san-pham',[upload.any(), Authentiaction.requireUser, Authenti
         messeage: "Add product",
         product: product
     })
-
 })
 
 module.exports = router;

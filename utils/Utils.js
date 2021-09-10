@@ -11,6 +11,21 @@ module.exports = {
         }
         return (path + removeTV(arr[arr.length - 1])    )
     },
+    mapProduct : (product, id, anh) => {
+        if(product.cap_danh_muc == 0) product.cap_danh_muc = "Điện thoại";
+        else product.cap_danh_muc = "Máy tính";
+    
+        product.danh_muc =  {
+            id : product.id_danh_muc,
+            ten : product.ten_danh_muc
+        }
+        product.anh_phu = anh
+        delete product.id_danh_muc
+        delete product.ten_danh_muc
+    
+        product.path = Utils.toPath(product.ten_sp, id);
+        return product
+    }
 
 }
 
