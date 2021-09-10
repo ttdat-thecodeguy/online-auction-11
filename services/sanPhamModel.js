@@ -1,0 +1,48 @@
+const db = require("../utils/db");
+
+table = "san_pham";
+
+function mapProduct() {
+  return db(table)
+      .join("danh_muc", "san_pham.id_danh_muc", "danh_muc.id_danh_muc")
+      .join("tai_khoan", "san_pham.id_nguoi_ban", "tai_khoan.id_nguoi_dung")
+      .select(
+        "san_pham.id_sp",
+        "san_pham.anh",
+        "san_pham.ten as ten_sp",
+        "san_pham.gia_dat",
+        "san_pham.gia_mua_ngay",
+        "san_pham.buoc_gia",
+        "tai_khoan.ho_ten",
+        "san_pham.publish_date",
+        "san_pham.end_date",
+        "san_pham.mo_ta",
+        "danh_muc.id_danh_muc",
+        "danh_muc.ten as ten_danh_muc",
+        "danh_muc.cap_danh_muc"
+      );
+}
+
+module.exports = {
+  findAll() {
+    return db(table);
+  },
+  filterSanPham(condition, sort, size){
+    return mapProduct().limit(size).orderBy(condition, sort)
+  },
+  findImageById(id_sp){
+    return db("anh_san_pham").where("id_sp", id_sp)
+  },
+  findById(id) {
+    return mapProduct().where("id_sp", id)     
+  },
+  add(sanpham) {
+    return db(table).insert(sanpham);
+  },
+  del(id) {
+    return db(table).where("id", id).del();
+  },
+  update(id, sanpham) {
+    return db(sanpham).where("id", id).update(sanpham);
+  },
+};

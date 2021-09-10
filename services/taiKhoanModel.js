@@ -35,6 +35,16 @@ module.exports = {
       .where("id_nguoi_dung", id)
       .del();
   },
+  updateNangDiemDanhGia(id, diem){
+    return db(table)
+      .where("id_nguoi_dung", id)
+      .update("diem_danhgia_duong", diem);
+  },
+  updateHaDiemDanhGia(id, diem){
+    return db(table)
+      .where("id_nguoi_dung", id)
+      .update("diem_danhgia_am", diem);
+  },
   update(id, taikhoan) {
     return db(table)
       .where("id_nguoi_dung", id)
