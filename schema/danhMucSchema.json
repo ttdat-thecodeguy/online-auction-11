@@ -1,0 +1,38 @@
+{
+    "them_danh_muc": {
+        "type": "object",
+        "properties": {
+            "ten":{
+                "type": "string"
+            },
+            "cap_danh_muc":{
+                "type": "integer"
+            }
+        },
+        "required": [
+            "ten",
+            "cap_danh_muc"
+        ],
+        "additionalProperties": false
+    },
+    "cap_nhat_danh_muc": {
+        "type": "object",
+        "properties": {
+            "id_danh_muc":{
+                "type": "integer"
+            },
+            "ten":{
+                "type": "string",
+                "minLength": 1
+            },
+            "cap_danh_muc":{
+                "type": "integer",
+                "enum": [0, 1]
+            }
+        },
+        "required": [
+            "id_danh_muc"
+        ],
+        "additionalProperties": false
+    }
+}

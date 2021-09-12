@@ -36,6 +36,6 @@ router.get('/danh-sach-san-pham', async function (req, res) {
         to,
         last_page
     })
-})
+});
 
 module.exports = router;
