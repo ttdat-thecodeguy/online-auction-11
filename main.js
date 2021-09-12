@@ -18,11 +18,12 @@ app.use(express.json());
 ///// user //// Dat
 app.use('/', require('./routes/BaoMat'));
 app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/TaiKhoan'))
+app.use('/api/tai-khoan/yeu-thich', Authentiaction.requireUser, require('./routes/YeuThich'))
 app.use('/api/san-pham' ,require('./routes/SanPham'))
 app.use('/api/dau-gia',[Authentiaction.requireUser, Authentiaction.requireDiemDanhGia] ,require('./routes/DauGia'))
 
 //// admin // Khương Nguyễn
-app.use("/api/admin/quan-ly-nguoi-dung",[], require("./routes/Admin/QLNguoiDung"))
+app.use("/api/admin/quan-ly-nguoi-dung",[Authentiaction.requireUser, Authentiaction.requireAdmin], require("./routes/Admin/QLNguoiDung"))
 app.use("/api/admin/quan-ly-san-pham",[Authentiaction.requireUser, Authentiaction.requireAdmin], require("./routes/Admin/QLSanPham"))
 app.use("/api/admin/quan-ly-danh-muc",[Authentiaction.requireUser, Authentiaction.requireAdmin], require("./routes/Admin/QLDanhMuc"))
 

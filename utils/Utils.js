@@ -23,7 +23,7 @@ module.exports = {
         delete product.id_danh_muc
         delete product.ten_danh_muc
     
-        product.path = Utils.toPath(product.ten_sp, id);
+        product.path = module.exports.toPath(product.ten_sp, id);
         return product
     }
 
