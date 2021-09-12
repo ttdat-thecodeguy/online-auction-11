@@ -18,6 +18,7 @@ app.use(express.json());
 ///// user //// Dat
 app.use('/', require('./routes/BaoMat'));
 app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/TaiKhoan'))
+app.use('/api/tai-khoan/yeu-thich', Authentiaction.requireUser, require('./routes/YeuThich'))
 app.use('/api/san-pham' ,require('./routes/SanPham'))
 app.use('/api/dau-gia',[Authentiaction.requireUser, Authentiaction.requireDiemDanhGia] ,require('./routes/DauGia'))
 

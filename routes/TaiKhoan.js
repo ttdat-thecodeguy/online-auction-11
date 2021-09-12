@@ -8,7 +8,6 @@ const saltRounds = 10;
 
 router.get("/details", async function (req, res) {
   //set header = x-access-token
-
   const id = req.accessTokenPayload.id || 0;
   const user = await taiKhoanModel.findById(id);
   if (user == null || user.OTP != null) {
@@ -46,7 +45,8 @@ router.post("/doi-mat-khau", async (req, res) => {
   });
 });
 
-router.get("/nang-diem-danh-gia", async (req, res)=>{
+
+router.patch("/nang-diem-danh-gia", async (req, res)=>{
   const id = req.accessTokenPayload.id || 0;
   const id_target = req.query.target
   if(id == id_target){
@@ -68,7 +68,7 @@ router.get("/nang-diem-danh-gia", async (req, res)=>{
 
 })
 
-router.get("/ha-diem-danh-gia", async (req, res)=>{
+router.patch("/ha-diem-danh-gia", async (req, res)=>{
   const id = req.accessTokenPayload.id || 0;
   const id_target = req.query.target
   if(id == id_target){
@@ -90,7 +90,7 @@ router.get("/ha-diem-danh-gia", async (req, res)=>{
 })
 
 
-router.post("/cap-nhat", async (req, res) => {
+router.patch("/cap-nhat", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
 
   const account = req.body;
@@ -102,5 +102,10 @@ router.post("/cap-nhat", async (req, res) => {
 
   res.json(account);
 });
+
+
+
+
+
 
 module.exports = router;
