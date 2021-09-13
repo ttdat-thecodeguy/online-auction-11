@@ -22,8 +22,6 @@ const Utils = require('../utils/Utils')
 //     res.send(publicIds);
 // });
 
-
-
 ////// search
 //Tìm Kiếm Theo tên sản phẩm hoặc danh mục
 
@@ -32,7 +30,13 @@ router.get('/tim-kiem', async (req, res)=>{
     let cate = req.query.cate;
     let product = null;
     if(name != null && cate == null) product = await sanPhamModel.findByName(name)
-    else if(cate != null && name == null) product = await sanPhamModel.findByCate(parseInt(cate))
+    else if(cate != null && name == null) {
+        if(isNaN(parseInt(cate))){
+            product = await sanPhamModel.findByCateName(cate)
+        }else{
+            product = await sanPhamModel.findByCateId(parseInt(cate))
+        }
+    }
     else if(name == null && cate == null) {
         res.json({
             messeage: "no condition query"

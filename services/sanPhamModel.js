@@ -3,7 +3,7 @@ const db = require("../utils/db");
 table = "san_pham";
 
 function mapProduct() {
-  return db(table)
+  return db("san_pham")
       .join("danh_muc", "san_pham.id_danh_muc", "danh_muc.id_danh_muc")
       .join("tai_khoan", "san_pham.id_nguoi_ban", "tai_khoan.id_nguoi_dung")
       .select(
@@ -30,22 +30,25 @@ module.exports = {
     return mapProduct().limit(size).orderBy(condition, sort)
   },
   findImageById(id_sp){
-    return db("anh_san_pham").where("id_sp", id_sp)
+    return db("anh_san_pham").where({"id_sp": id_sp})
   },
   findById(id) {
-    return mapProduct().where("id_sp", id)     
+    return mapProduct().where({"id_sp": id,"isLocked": 0})     
   },
   findByName(name){
-    return mapProduct().where("ten", "LIKE" ,"%" + name + "%")
+    return mapProduct().where("san_pham.ten", "LIKE" ,"%" + name + "%").andWhere("isLocked", 0)
   },
-  findByCate(id_cate){
-    return mapProduct().where("danh_muc.id_danh_muc", id_cate)
+  findByCateName(cate){
+    return mapProduct().where("danh_muc.ten", "LIKE" ,"%" + cate + "%").andWhere("isLocked", 0)
+  },
+  findByCateId(id_cate){
+    return mapProduct().where("danh_muc.id_danh_muc", id_cate).andWhere("isLocked", 0)
   },
   findByCateWithPaging(id_cate, offset, per_page){
-    return mapProduct().where("danh_muc.id_danh_muc", id_cate).offset(offset).limit(per_page);
+    return mapProduct().where("danh_muc.id_danh_muc", id_cate).andWhere("isLocked", 0).offset(offset).limit(per_page);
   },
   countProduct(){
-    return db("san_pham").count('* as count')
+    return db("san_pham").count('* as count').where("isLocked",0)
   },  
   add(sanpham) {
     return db(table).insert(sanpham);
