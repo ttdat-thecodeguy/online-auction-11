@@ -64,6 +64,11 @@ router.post("/tham-gia", async function (req, res) {
   /// nếu chưa có lượt đấu giá nào cho sp này
   if (luot_dau_gia == 0) {
     await dauGiaModel.add(dau_gia_rs);
+
+    /// tăng lượt đấu giá
+    let luotdaugia = luot_dau_gia + 1;
+    await sanPhamModel.updateLuotDauGia(luotdaugia);
+
     return res.json({ messeage: "win", isWin: true, gia_hien_tai: gia_dat}).status(200).end();
   } 
   else {
@@ -77,7 +82,13 @@ router.post("/tham-gia", async function (req, res) {
         dau_gia_rs.id_tra_cao_nhat = cao_nhat.id_tra_cao_nhat
         //// khi giá khởi điểm của top ở dưới mức đặt giá
         //// nâng giá khởi điểm
-        if(cao_nhat.gia_khoi_diem < dat_gia) await dauGiaModel.add(dau_gia_rs);
+        if(cao_nhat.gia_khoi_diem < dat_gia){
+           await dauGiaModel.add(dau_gia_rs);
+
+           let luotdaugia = luot_dau_gia + 1;
+           await sanPhamModel.updateLuotDauGia(luotdaugia);
+
+        }
 
         return res.json({
             messeage: "lose. need higher price",
@@ -89,6 +100,11 @@ router.post("/tham-gia", async function (req, res) {
         dau_gia_rs.gia_khoi_diem = cao_nhat.gia_tra_cao_nhat;
 
         await dauGiaModel.add(dau_gia_rs);
+
+        //// tăng lượt đấu giá
+        let luotdaugia = luot_dau_gia + 1;
+        await sanPhamModel.updateLuotDauGia(luotdaugia);
+
         // thông báo thắng cuộc
         return res.json({ messeage: "win", isWin: true, gia_hien_tai: cao_nhat.gia_tra_cao_nhat}).status(200).end();
     }

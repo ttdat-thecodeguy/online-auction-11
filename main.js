@@ -15,12 +15,15 @@ app.use(express.json());
 // swaggerDocument = require('./swagger.json')
 
 
-///// user //// Dat
+///// user - bidger //// Dat
 app.use('/', require('./routes/BaoMat'));
 app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/TaiKhoan'))
 app.use('/api/tai-khoan/yeu-thich', Authentiaction.requireUser, require('./routes/YeuThich'))
 app.use('/api/san-pham' ,require('./routes/SanPham'))
 app.use('/api/dau-gia',[Authentiaction.requireUser, Authentiaction.requireDiemDanhGia] ,require('./routes/DauGia'))
+
+////// user - seller /// dat
+app.use('/api/tai-khoan/don-hang', [Authentiaction.requireUser, Authentiaction.requireSeller], require('./routes/Seller/DonHang'))
 
 //// admin // Khương Nguyễn
 app.use("/api/admin/quan-ly-nguoi-dung",[Authentiaction.requireUser, Authentiaction.requireAdmin], require("./routes/Admin/QLNguoiDung"))

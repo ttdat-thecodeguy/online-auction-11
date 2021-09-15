@@ -1,6 +1,6 @@
 const db = require("../utils/db");
 
-table = "san_pham";
+const table = "san_pham";
 
 function mapProduct() {
   return db("san_pham")
@@ -25,6 +25,11 @@ function mapProduct() {
 module.exports = {
   findAll() {
     return db(table);
+  },
+  findAllKetThuc(){
+    return db(table)
+    .join("tai_khoan", "san_pham.id_nguoi_ban", "tai_khoan.id_nguoi_dung")
+    .where("end_date","<",new Date(Date.now())).andWhere("isLocked", 0);
   },
   filterSanPham(condition, sort, size){
     return mapProduct().limit(size).orderBy(condition, sort)
@@ -54,9 +59,18 @@ module.exports = {
     return db(table).insert(sanpham);
   },
   del(id) {
-    return db(table).where("id", id).del();
+    return db(table).where("id_sp", id).del();
   },
   update(id, sanpham) {
-    return db(sanpham).where("id", id).update(sanpham);
+    return db(table).where("id_sp", id).update(sanpham);
   },
+  updateLuotDauGia(id, luot_daugia){
+    return db(table).where("id_sp", id).update({
+      luot_daugia
+    })
+  },updateStatus(id, isLocked){
+    return db(table).where("id_sp", id).update({
+      isLocked
+    })
+  }
 };

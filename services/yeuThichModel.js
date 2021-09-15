@@ -1,6 +1,6 @@
 const db = require('../utils/db');
 
-table = "yeu_thich"
+const table = "yeu_thich"
 
 function mapProduct() {
     return db(table).join("san_pham", "yeu_thich.id_san_pham","san_pham.id_sp")

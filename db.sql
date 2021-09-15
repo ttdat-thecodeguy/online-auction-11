@@ -2,10 +2,10 @@
 -- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1:3308
--- Thời gian đã tạo: Th9 13, 2021 lúc 10:08 AM
--- Phiên bản máy phục vụ: 5.7.28
--- Phiên bản PHP: 7.3.12
+-- Host: 127.0.0.1:3308
+-- Generation Time: Sep 15, 2021 at 06:38 AM
+-- Server version: 5.7.28
+-- PHP Version: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `online-auction`
+-- Database: `online-auction`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `anh_san_pham`
+-- Table structure for table `anh_san_pham`
 --
 
 DROP TABLE IF EXISTS `anh_san_pham`;
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `anh_san_pham` (
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `anh_san_pham`
+-- Dumping data for table `anh_san_pham`
 --
 
 INSERT INTO `anh_san_pham` (`id_anh`, `id_sp`, `ten`) VALUES
@@ -57,7 +57,7 @@ INSERT INTO `anh_san_pham` (`id_anh`, `id_sp`, `ten`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `danh_gia`
+-- Table structure for table `danh_gia`
 --
 
 DROP TABLE IF EXISTS `danh_gia`;
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `danh_gia` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `danh_muc`
+-- Table structure for table `danh_muc`
 --
 
 DROP TABLE IF EXISTS `danh_muc`;
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `danh_muc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `danh_muc`
+-- Dumping data for table `danh_muc`
 --
 
 INSERT INTO `danh_muc` (`id_danh_muc`, `ten`, `cap_danh_muc`) VALUES
@@ -98,22 +98,30 @@ INSERT INTO `danh_muc` (`id_danh_muc`, `ten`, `cap_danh_muc`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `dat_hang`
+-- Table structure for table `dat_hang`
 --
 
 DROP TABLE IF EXISTS `dat_hang`;
 CREATE TABLE IF NOT EXISTS `dat_hang` (
   `id_sp` int(11) NOT NULL,
-  `id_nguoi_dung` int(11) NOT NULL,
+  `id_nguoi_mua` int(11) NOT NULL,
+  `id_nguoi_ban` int(11) NOT NULL,
   `gia_mua` int(11) NOT NULL,
   `ngay_dat_hang` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_sp`,`id_nguoi_dung`)
+  PRIMARY KEY (`id_sp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dat_hang`
+--
+
+INSERT INTO `dat_hang` (`id_sp`, `id_nguoi_mua`, `id_nguoi_ban`, `gia_mua`, `ngay_dat_hang`) VALUES
+(24, 3, 0, 3020, '2021-09-15 06:07:04');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `dau_gia`
+-- Table structure for table `dau_gia`
 --
 
 DROP TABLE IF EXISTS `dau_gia`;
@@ -130,19 +138,19 @@ CREATE TABLE IF NOT EXISTS `dau_gia` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `dau_gia`
+-- Dumping data for table `dau_gia`
 --
 
 INSERT INTO `dau_gia` (`id_dau_gia`, `id_sp`, `id_nguoi_ban`, `gia_khoi_diem`, `id_tra_cao_nhat`, `gia_tra_cao_nhat`, `ngay_dat`, `ngay_ket_thuc`) VALUES
-(3, 24, 0, 2800, 1, 3000, '2021-09-13 07:51:00', '2021-09-30 08:29:27'),
-(7, 24, 0, 3000, 1, 3000, '2021-09-13 09:15:00', '2021-09-30 08:29:27'),
-(8, 24, 0, 3020, 1, 3020, '2021-09-13 09:15:26', '2021-09-30 08:29:27'),
-(9, 24, 0, 3020, 3, 4000, '2021-09-13 09:16:45', '2021-09-30 08:29:27');
+(3, 24, 0, 2800, 1, 3000, '2021-09-13 07:51:00', '2021-09-11 03:42:15'),
+(7, 24, 0, 3000, 1, 3000, '2021-09-13 09:15:00', '2021-09-11 03:42:15'),
+(8, 24, 0, 3020, 1, 3020, '2021-09-13 09:15:26', '2021-09-11 03:42:15'),
+(9, 24, 0, 3020, 3, 4000, '2021-09-13 09:16:45', '2021-09-11 03:42:15');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `nang_cap_tk`
+-- Table structure for table `nang_cap_tk`
 --
 
 DROP TABLE IF EXISTS `nang_cap_tk`;
@@ -153,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `nang_cap_tk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `nang_cap_tk`
+-- Dumping data for table `nang_cap_tk`
 --
 
 INSERT INTO `nang_cap_tk` (`id_nguoi_dung`, `id_quyen_han_mong_muon`) VALUES
@@ -162,7 +170,7 @@ INSERT INTO `nang_cap_tk` (`id_nguoi_dung`, `id_quyen_han_mong_muon`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `quyen_han`
+-- Table structure for table `quyen_han`
 --
 
 DROP TABLE IF EXISTS `quyen_han`;
@@ -173,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `quyen_han` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `quyen_han`
+-- Dumping data for table `quyen_han`
 --
 
 INSERT INTO `quyen_han` (`id_quyen_han`, `ten`) VALUES
@@ -184,7 +192,7 @@ INSERT INTO `quyen_han` (`id_quyen_han`, `ten`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `san_pham`
+-- Table structure for table `san_pham`
 --
 
 DROP TABLE IF EXISTS `san_pham`;
@@ -199,27 +207,27 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
   `luot_daugia` int(11) NOT NULL DEFAULT '0',
   `isGiaHan` int(11) NOT NULL DEFAULT '0',
   `id_nguoi_ban` int(11) NOT NULL,
-  `publish_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `end_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `publish_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `end_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `mo_ta` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
   `isLocked` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_sp`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `san_pham`
+-- Dumping data for table `san_pham`
 --
 
 INSERT INTO `san_pham` (`id_sp`, `anh`, `ten`, `id_danh_muc`, `gia_dat`, `gia_mua_ngay`, `buoc_gia`, `luot_daugia`, `isGiaHan`, `id_nguoi_ban`, `publish_date`, `end_date`, `mo_ta`, `isLocked`) VALUES
-(24, 'iphone-12-pro-max100dd7f1-973a-4640-9c8d-d66e93ee3c8e.png', 'Điện Thoại IPhone 12 Promax', 3, 2800, 3000, 50, 2, 0, 1, '2021-09-13 08:46:04', '2021-09-30 08:29:27', 'Đẹp, thởi thượng', 0),
-(25, 'iphone-5sc2eb9cf4-d3b5-4f26-994e-184bc6ff8774.png', 'Điện Thoại IPhone 5s', 3, 4000, 9000, 150, 1, 0, 1, '2021-09-13 08:46:13', '2021-09-25 08:22:33', 'Đẹp, thởi thượng', 0),
-(26, 'dell-dell-g3-15-3500-gaming-laptop-computer-config-160bac2c0-7994-48b6-9b1e-1011ed032b9d.jpg', 'Máy Tính Dell G3', 4, 6000, 9000, 130, 1, 0, 1, '2021-09-13 08:46:17', '2021-09-21 08:22:53', 'Đẹp, thởi thượng', 0),
-(28, '637318137488561447_xiaomi-redmi-9a-xanh-dd-bh0db2cb33-3b2a-4237-bb37-0b48366666e5.jpg', 'Điện Thoại Xiaomin 9SE', 6, 1300, 2400, 100, 1, 0, 1, '2021-09-13 08:46:24', '2021-10-20 08:23:10', 'Đẹp, thởi thượng', 0);
+(24, 'iphone-12-pro-max100dd7f1-973a-4640-9c8d-d66e93ee3c8e.png', 'Điện Thoại IPhone 12 Promax', 3, 2800, 3000, 50, 4, 0, 1, '2021-09-15 03:42:15', '2021-09-11 03:42:15', 'Đẹp, thởi thượng', 1),
+(25, 'iphone-5sc2eb9cf4-d3b5-4f26-994e-184bc6ff8774.png', 'Điện Thoại IPhone 5s', 3, 4000, 9000, 150, 0, 0, 1, '2021-09-15 03:42:26', '2021-09-21 03:42:26', 'Đẹp, thởi thượng', 0),
+(26, 'dell-dell-g3-15-3500-gaming-laptop-computer-config-160bac2c0-7994-48b6-9b1e-1011ed032b9d.jpg', 'Máy Tính Dell G3', 4, 6000, 9000, 130, 0, 0, 1, '2021-09-15 03:42:28', '2021-09-30 03:42:28', 'Đẹp, thởi thượng', 0),
+(28, '637318137488561447_xiaomi-redmi-9a-xanh-dd-bh0db2cb33-3b2a-4237-bb37-0b48366666e5.jpg', 'Điện Thoại Xiaomin 9SE', 6, 1300, 2400, 100, 0, 0, 1, '2021-09-15 03:42:31', '2021-09-28 03:42:31', 'Đẹp, thởi thượng', 0);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `tai_khoan`
+-- Table structure for table `tai_khoan`
 --
 
 DROP TABLE IF EXISTS `tai_khoan`;
@@ -240,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `tai_khoan` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Người Dùng';
 
 --
--- Đang đổ dữ liệu cho bảng `tai_khoan`
+-- Dumping data for table `tai_khoan`
 --
 
 INSERT INTO `tai_khoan` (`id_nguoi_dung`, `email`, `ho_ten`, `ngay_sinh`, `dia_chi`, `mat_khau`, `id_quyen_han`, `OTP`, `diem_danhgia_duong`, `diem_danhgia_am`, `expired`) VALUES
@@ -251,7 +259,7 @@ INSERT INTO `tai_khoan` (`id_nguoi_dung`, `email`, `ho_ten`, `ngay_sinh`, `dia_c
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `yeu_thich`
+-- Table structure for table `yeu_thich`
 --
 
 DROP TABLE IF EXISTS `yeu_thich`;
@@ -262,7 +270,7 @@ CREATE TABLE IF NOT EXISTS `yeu_thich` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `yeu_thich`
+-- Dumping data for table `yeu_thich`
 --
 
 INSERT INTO `yeu_thich` (`id_nguoi_dung`, `id_san_pham`) VALUES

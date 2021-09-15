@@ -92,6 +92,15 @@ router.get('/sap-xep', async (req, res) =>{
 router.get('/details/:name', async (req, res) => {
     let id = req.params.name.split("-")[0] || 0;
     let product = await sanPhamModel.findById(id);
+    
+    // let now = new Date(Date.now())
+    // let end_date = new Date(product.end_date)
+    
+    // if(now > end_date){
+    //     res.json({
+    //         messeage: "product is expired"   
+    //     }).status(200)
+    // }
 
     if(product == null || product.length == 0){
         res.json({
