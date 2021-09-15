@@ -109,9 +109,19 @@ router.post("/tham-gia", async function (req, res) {
         return res.json({ messeage: "win", isWin: true, gia_hien_tai: cao_nhat.gia_tra_cao_nhat}).status(200).end();
     }
   }
-
-
-
 });
+
+///////////// API CHỈ ĐỂ TEST
+
+router.get("/update-status", async(req, res)=>{
+    const id = req.query.id_sp;
+    const status = req.query.status;
+    await dauGiaModel.updateStatus(id, status)
+    res.json({
+      messeage: "update successfully"
+    }).end()
+})
+
+
 
 module.exports = router;

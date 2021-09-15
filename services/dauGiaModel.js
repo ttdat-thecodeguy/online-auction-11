@@ -21,8 +21,14 @@ module.exports = {
 
         return db(table)  
         .where({"id_sp":id_sp,
-                                   "gia_tra_cao_nhat":max.gia_cao_nhat}).andWhere(
+                "gia_tra_cao_nhat":max.gia_cao_nhat,
+                 "isLocked":0}).andWhere(
                                        "ngay_ket_thuc", "<", new Date(Date.now())
                                    ).first()
+    },
+    updateStatus(id_sp, isLocked){
+        return db(table).where("id_sp",id_sp).update({
+            isLocked
+        })
     }
 };

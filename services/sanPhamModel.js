@@ -13,13 +13,16 @@ function mapProduct() {
         "san_pham.gia_dat",
         "san_pham.gia_mua_ngay",
         "san_pham.buoc_gia",
+        "tai_khoan.email",
+        "tai_khoan.id_nguoi_dung as id_nguoi_ban",
         "tai_khoan.ho_ten",
         "san_pham.publish_date",
         "san_pham.end_date",
         "san_pham.mo_ta",
         "danh_muc.id_danh_muc",
         "danh_muc.ten as ten_danh_muc",
-        "danh_muc.cap_danh_muc"
+        "danh_muc.cap_danh_muc",
+        "san_pham.isLocked"
       );
 }
 module.exports = {
@@ -38,7 +41,7 @@ module.exports = {
     return db("anh_san_pham").where({"id_sp": id_sp})
   },
   findById(id) {
-    return mapProduct().where({"id_sp": id,"isLocked": 0})     
+    return mapProduct().where({"id_sp": id})   
   },
   findByName(name){
     return mapProduct().where("san_pham.ten", "LIKE" ,"%" + name + "%").andWhere("isLocked", 0)
