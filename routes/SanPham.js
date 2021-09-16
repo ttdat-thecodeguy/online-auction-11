@@ -50,11 +50,9 @@ router.get('/sap-xep', async (req, res) =>{
     else if(time != null && price == null){
         product = await sanPhamModel.filterSanPham("end_date", "desc", Number.MAX_SAFE_INTEGER)
     }
-    ///cần hỏi thầy là giá nào
     else if(time == null && price != null){
-        product = await sanPhamModel.filterSanPham("gia_dat", "asc", Number.MAX_SAFE_INTEGER)
+        product = await sanPhamModel.filterSanPhamTheoGiaHT("gia_hien_tai", "asc", Number.MAX_SAFE_INTEGER)
     }
-
     else {
         return res.json({
             messeage: "time or price query"
@@ -94,6 +92,9 @@ router.get('/details/:name', async (req, res) => {
     product =  Utils.mapProduct(product[0], id, anh)
     return res.json(product)
 })
+
+///////////// TRANG CHỦ
+
 
 router.get("/5-san-pham-gan-ket-thuc", async (req, res)=>{
     let product = await sanPhamModel.filterSanPham("end_date","asc",5)

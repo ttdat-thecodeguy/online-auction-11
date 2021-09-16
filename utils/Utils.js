@@ -1,3 +1,33 @@
+var moment = require('moment'); // require
+
+require('moment/locale/vi')
+
+// moment.updateLocale('en', {
+//     relativeTime : {
+//         future: "in %s",
+//         past:   "%s ago",
+//         s: function (number, withoutSuffix, key, isFuture){
+//             return '00:' + (number<10 ? '0':'') + number + ' minutes';
+//         },
+//         m:  "01:00 minutes",
+//         mm: function (number, withoutSuffix, key, isFuture){
+//             return (number<10 ? '0':'') + number + ':00' + ' minutes';
+//         },
+//         h:  "an hour",
+//         hh: "%d hours",
+//         d:  "a day",
+//         dd: "%d days",
+//         M:  "a month",
+//         MM: "%d months",
+//         y:  "a year",
+//         yy: "%d years"
+//     }
+// });
+
+moment.locale('vi')
+
+
+
 module.exports = {
     doiTiengViet : (str) => {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -22,7 +52,18 @@ module.exports = {
         product.anh_phu = anh
         delete product.id_danh_muc
         delete product.ten_danh_muc
-    
+        
+        var m =  moment(product.end_date);
+        var today = moment().startOf('day');
+        var sec = Math.round(moment.duration(m - today).asSeconds());
+
+        product.thoi_gian_tuong_doi = null
+
+
+        if(sec < 259200){
+            product.thoi_gian_tuong_doi = m.fromNow()
+        }
+
         product.path = module.exports.toPath(product.ten_sp, id);
         return product
     },
@@ -32,6 +73,8 @@ module.exports = {
     }
 
 }
+
+
 
 function replaceBetween(start, end, chr, str) {
     let masking = ''

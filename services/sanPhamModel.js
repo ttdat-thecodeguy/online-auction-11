@@ -61,7 +61,8 @@ module.exports = {
   countProductByCate(id_cate){
     return mapProduct().count('* as count').where("isLocked",0).andWhere("danh_muc.id_danh_muc", id_cate).first()
   },
-  add(sanpham) {
+  async add(sanpham) {
+    sanpham.gia_hien_tai = sanpham.gia_dat
     return db(table).insert(sanpham);
   },
   del(id) {
@@ -69,6 +70,11 @@ module.exports = {
   },
   update(id, sanpham) {
     return db(table).where("id_sp", id).update(sanpham);
+  },
+  updateGiaHT(id_sp, gia_hien_tai){
+    return db(table).where("id_sp", id_sp).update({
+      gia_hien_tai
+    })
   },
   updateLuotDauGia(id, luot_daugia){
     return db(table).where("id_sp", id).update({

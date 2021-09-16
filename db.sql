@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Sep 16, 2021 at 01:12 PM
+-- Generation Time: Sep 16, 2021 at 02:12 PM
 -- Server version: 5.7.28
 -- PHP Version: 7.3.12
 
@@ -145,10 +145,10 @@ CREATE TABLE IF NOT EXISTS `dau_gia` (
 --
 
 INSERT INTO `dau_gia` (`id_dau_gia`, `id_sp`, `id_nguoi_ban`, `gia_khoi_diem`, `id_tra_cao_nhat`, `gia_tra_cao_nhat`, `ngay_dat`, `ngay_ket_thuc`, `status`) VALUES
-(3, 24, 1, 2800, 1, 3000, '2021-09-13 07:51:00', '2021-09-11 03:42:15', 1),
-(7, 24, 1, 3000, 1, 3000, '2021-09-13 09:15:00', '2021-09-11 03:42:15', 1),
-(8, 24, 1, 3020, 1, 3020, '2021-09-13 09:15:26', '2021-09-11 03:42:15', 1),
-(9, 24, 1, 3020, 6, 4000, '2021-09-13 09:16:45', '2021-09-11 03:42:15', 2);
+(3, 24, 1, 2800, 1, 3000, '2021-09-13 07:51:00', '2021-09-17 03:42:15', 1),
+(7, 24, 1, 3000, 1, 3000, '2021-09-13 09:15:00', '2021-09-17 03:42:15', 1),
+(8, 24, 1, 3020, 1, 3020, '2021-09-13 09:15:26', '2021-09-17 03:42:15', 1),
+(9, 24, 1, 3020, 6, 4000, '2021-09-13 09:16:45', '2021-09-17 03:42:15', 2);
 
 -- --------------------------------------------------------
 
@@ -205,6 +205,7 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
   `ten` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `id_danh_muc` int(11) NOT NULL,
   `gia_dat` int(11) NOT NULL,
+  `gia_hien_tai` int(11) NOT NULL,
   `gia_mua_ngay` int(11) NOT NULL,
   `buoc_gia` int(11) NOT NULL,
   `luot_daugia` int(11) NOT NULL DEFAULT '0',
@@ -221,11 +222,11 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
 -- Dumping data for table `san_pham`
 --
 
-INSERT INTO `san_pham` (`id_sp`, `anh`, `ten`, `id_danh_muc`, `gia_dat`, `gia_mua_ngay`, `buoc_gia`, `luot_daugia`, `isGiaHan`, `id_nguoi_ban`, `publish_date`, `end_date`, `mo_ta`, `isLocked`) VALUES
-(24, 'iphone-12-pro-max100dd7f1-973a-4640-9c8d-d66e93ee3c8e.png', 'Điện Thoại IPhone 12 Promax', 3, 2800, 3000, 50, 4, 0, 1, '2021-09-15 03:42:15', '2021-09-11 03:42:15', 'Đẹp, thởi thượng', 0),
-(25, 'iphone-5sc2eb9cf4-d3b5-4f26-994e-184bc6ff8774.png', 'Điện Thoại IPhone 5s', 3, 4000, 9000, 150, 0, 0, 1, '2021-09-15 03:42:26', '2021-09-21 03:42:26', 'Đẹp, thởi thượng', 1),
-(26, 'dell-dell-g3-15-3500-gaming-laptop-computer-config-160bac2c0-7994-48b6-9b1e-1011ed032b9d.jpg', 'Máy Tính Dell G3', 4, 6000, 9000, 130, 0, 0, 1, '2021-09-15 03:42:28', '2021-09-30 03:42:28', 'Đẹp, thởi thượng', 0),
-(28, '637318137488561447_xiaomi-redmi-9a-xanh-dd-bh0db2cb33-3b2a-4237-bb37-0b48366666e5.jpg', 'Điện Thoại Xiaomin 9SE', 6, 1300, 2400, 100, 0, 0, 1, '2021-09-15 03:42:31', '2021-09-28 03:42:31', 'Đẹp, thởi thượng', 0);
+INSERT INTO `san_pham` (`id_sp`, `anh`, `ten`, `id_danh_muc`, `gia_dat`, `gia_hien_tai`, `gia_mua_ngay`, `buoc_gia`, `luot_daugia`, `isGiaHan`, `id_nguoi_ban`, `publish_date`, `end_date`, `mo_ta`, `isLocked`) VALUES
+(24, 'iphone-12-pro-max100dd7f1-973a-4640-9c8d-d66e93ee3c8e.png', 'Điện Thoại IPhone 12 Promax', 3, 2800, 2800, 3000, 50, 4, 0, 1, '2021-09-15 03:42:15', '2021-09-17 03:42:15', 'Đẹp, thởi thượng', 0),
+(25, 'iphone-5sc2eb9cf4-d3b5-4f26-994e-184bc6ff8774.png', 'Điện Thoại IPhone 5s', 3, 4000, 4000, 9000, 150, 0, 0, 1, '2021-09-15 03:42:26', '2021-09-21 03:42:26', 'Đẹp, thởi thượng', 1),
+(26, 'dell-dell-g3-15-3500-gaming-laptop-computer-config-160bac2c0-7994-48b6-9b1e-1011ed032b9d.jpg', 'Máy Tính Dell G3', 4, 6000, 6000, 9000, 130, 0, 0, 1, '2021-09-15 03:42:28', '2021-09-30 03:42:28', 'Đẹp, thởi thượng', 0),
+(28, '637318137488561447_xiaomi-redmi-9a-xanh-dd-bh0db2cb33-3b2a-4237-bb37-0b48366666e5.jpg', 'Điện Thoại Xiaomin 9SE', 6, 1300, 1300, 2400, 100, 0, 0, 1, '2021-09-15 03:42:31', '2021-09-28 03:42:31', 'Đẹp, thởi thượng', 0);
 
 -- --------------------------------------------------------
 

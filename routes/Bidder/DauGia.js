@@ -71,6 +71,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
     /// tăng lượt đấu giá
     let luotdaugia = luot_dau_gia + 1;
     await sanPhamModel.updateLuotDauGia(luotdaugia);
+    await sanPhamModel.updateGiaHT(id_sp, gia_dat)
 
     return res.json({ messeage: "win", isWin: true, gia_hien_tai: gia_dat}).status(200).end();
   } 
@@ -90,7 +91,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
            
            let luotdaugia = luot_dau_gia + 1;
            await sanPhamModel.updateLuotDauGia(luotdaugia);
-
+           await sanPhamModel.updateGiaHT(id_sp, dau_gia_rs.gia_khoi_diem)
         }
 
         return res.json({
@@ -107,6 +108,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
         //// tăng lượt đấu giá
         let luotdaugia = luot_dau_gia + 1;
         await sanPhamModel.updateLuotDauGia(luotdaugia);
+        await sanPhamModel.updateGiaHT(id_sp, cao_nhat.gia_tra_cao_nhat)
 
         // thông báo thắng cuộc
         return res.json({ messeage: "win", isWin: true, gia_hien_tai: cao_nhat.gia_tra_cao_nhat}).status(200).end();
