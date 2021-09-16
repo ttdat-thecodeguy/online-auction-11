@@ -26,8 +26,8 @@ function mapProduct() {
       );
 }
 module.exports = {
-  findAll() {
-    return mapProduct().andWhere("isLocked", 0).offset(offset).limit(per_page);
+  findAll(offset, per_page) {
+    return mapProduct().where("isLocked", 0).limit(per_page).offset(offset)
   },
   findAllKetThuc(){
     return db(table)
@@ -56,8 +56,11 @@ module.exports = {
     return mapProduct().where("danh_muc.id_danh_muc", id_cate).andWhere("isLocked", 0).offset(offset).limit(per_page);
   },
   countProduct(){
-    return db("san_pham").count('* as count').where("isLocked",0)
+    return db("san_pham").count('* as count').where("isLocked",0).first()
   },  
+  countProductByCate(id_cate){
+    return mapProduct().count('* as count').where("isLocked",0).andWhere("danh_muc.id_danh_muc", id_cate).first()
+  },
   add(sanpham) {
     return db(table).insert(sanpham);
   },

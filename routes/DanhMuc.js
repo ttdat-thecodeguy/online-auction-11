@@ -1,28 +1,29 @@
-const { resolveSchema } = require('ajv/dist/compile');
 const express = require('express');
 const router = express.Router();
-
-//
-
 const sanPhamModel = require('../services/sanPhamModel')
 
+const Utils = require("../utils/Utils")
 
 router.get('/danh-sach-san-pham', async function (req, res) {
-    const id = req.query.id
+    const cate = req.query.cate || 0
     
     var per_page = req.query.per_page || 10;
     var page = req.query.current_page || 1;
     if (page < 1) page = 1;
     var offset = (page - 1) * per_page;
-    if(id == 0){
-        return res.json({
-            messeage: "Categories Not found"
-        }).status(404)
-    }    
-    let product = await sanPhamModel.findByCateWithPaging(id,offset,per_page )
-    let total = await sanPhamModel.countProduct()
+    let product = null;
+
+    let t = null
+    if(cate == 0){
+        product = await sanPhamModel.findAll(offset, parseInt(per_page) )
+        t = await sanPhamModel.countProduct()
+    } else{
+        product = await sanPhamModel.findByCateWithPaging(cate,offset,per_page )
+        t = await sanPhamModel.countProductByCate(cate)
+    }   
+
     let to = offset + product.length;
-    let last_page = Math.ceil(total / per_page);
+    let last_page = Math.ceil(t.count / per_page);
 
 
     let arr_product = []
@@ -32,7 +33,7 @@ router.get('/danh-sach-san-pham', async function (req, res) {
     }
     return res.json({
         products: arr_product,
-        total,
+        count: t.count,
         to,
         last_page
     })

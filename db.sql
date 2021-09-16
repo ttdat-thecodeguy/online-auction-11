@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Sep 16, 2021 at 06:21 AM
+-- Generation Time: Sep 16, 2021 at 01:12 PM
 -- Server version: 5.7.28
 -- PHP Version: 7.3.12
 
@@ -63,9 +63,10 @@ INSERT INTO `anh_san_pham` (`id_anh`, `id_sp`, `ten`) VALUES
 DROP TABLE IF EXISTS `danh_gia`;
 CREATE TABLE IF NOT EXISTS `danh_gia` (
   `id_danh_gia` int(11) NOT NULL AUTO_INCREMENT,
+  `nguoi_danh_gia` int(11) NOT NULL,
+  `nguoi_bi_danh_gia` int(11) NOT NULL,
   `diem` int(11) NOT NULL,
   `nhan_xet` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
-  `id_sp` int(11) NOT NULL,
   PRIMARY KEY (`id_danh_gia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -144,10 +145,10 @@ CREATE TABLE IF NOT EXISTS `dau_gia` (
 --
 
 INSERT INTO `dau_gia` (`id_dau_gia`, `id_sp`, `id_nguoi_ban`, `gia_khoi_diem`, `id_tra_cao_nhat`, `gia_tra_cao_nhat`, `ngay_dat`, `ngay_ket_thuc`, `status`) VALUES
-(3, 24, 0, 2800, 1, 3000, '2021-09-13 07:51:00', '2021-09-11 03:42:15', 1),
-(7, 24, 0, 3000, 1, 3000, '2021-09-13 09:15:00', '2021-09-11 03:42:15', 1),
-(8, 24, 0, 3020, 1, 3020, '2021-09-13 09:15:26', '2021-09-11 03:42:15', 1),
-(9, 24, 0, 3020, 6, 4000, '2021-09-13 09:16:45', '2021-09-11 03:42:15', 1);
+(3, 24, 1, 2800, 1, 3000, '2021-09-13 07:51:00', '2021-09-11 03:42:15', 1),
+(7, 24, 1, 3000, 1, 3000, '2021-09-13 09:15:00', '2021-09-11 03:42:15', 1),
+(8, 24, 1, 3020, 1, 3020, '2021-09-13 09:15:26', '2021-09-11 03:42:15', 1),
+(9, 24, 1, 3020, 6, 4000, '2021-09-13 09:16:45', '2021-09-11 03:42:15', 2);
 
 -- --------------------------------------------------------
 
@@ -257,7 +258,7 @@ INSERT INTO `tai_khoan` (`id_nguoi_dung`, `email`, `ho_ten`, `ngay_sinh`, `dia_c
 (1, 'nijigi1129@rebation.com', 'John Henry', '2019-07-03 10:00:00.000000', '123 hung vuong', '$2b$10$uBhaNvbi9tiUi2UOGAwBku4YUfZEtOE/2InHBuxFa46Vw.I9wLVoG', 2, NULL, 0, 0, '2021-09-08 03:15:51'),
 (3, 'xegela5358@posiklan.com', 'abcf', NULL, '123 hung vuong', '$2b$10$I.bs9K2p1HJiQFPnbL3SJe10XpdYTe5Ftf49X6TtfdDeCXrS8oJuy', 1, NULL, 0, 0, '2021-09-08 03:23:35'),
 (5, 'gahowa2784@posiklan.com', 'adminstrator', NULL, '123 hung vuong', '$2b$10$213eVEt2x/XP9gVUaii0BuXLEDWES/4jmXUONdd56Fl69U0KAwmfG', 1, NULL, 1, 1, '2021-09-08 17:35:17'),
-(6, 'ttdat17ck1@gmail.com', 'Admin_TTD', NULL, '123 hung vuong', '$2b$10$QGDfKZzUQhOyw/gH./Tp2.WN/18usVeJWT4GrPak1.zF0gCYfNY9O', 1, NULL, 0, 0, '2021-09-16 10:03:07');
+(6, 'ttdat17ck1@gmail.com', 'hang', NULL, '123 hung vuong', '$2b$10$QGDfKZzUQhOyw/gH./Tp2.WN/18usVeJWT4GrPak1.zF0gCYfNY9O', 1, NULL, 0, 0, '2021-09-16 10:03:07');
 
 -- --------------------------------------------------------
 
