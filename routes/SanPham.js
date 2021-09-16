@@ -1,32 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid');
-const Authentiaction = require('../middlewares/auth')
-const multer  = require('multer')
-const upload = multer()
-
-const { cloudinary } = require('../utils/cloudinary');
-const anhModel = require('../services/anhModel')
-const mailer = require('../utils/mailer')
 
 const sanPhamModel = require('../services/sanPhamModel')
-const dauGiaModel = require('../services/dauGiaModel')
-const donHangModel = require('../services/datHangModel')
-
-
-
 const Utils = require('../utils/Utils')
 
-// app.get('/api/images', async (req, res) => {
-//     const { resources } = await cloudinary.search
-//         .expression('folder:dev_setups')
-//         .sort_by('public_id', 'desc')
-//         .max_results(30)
-//         .execute();
-
-//     const publicIds = resources.map((file) => file.public_id);
-//     res.send(publicIds);
-// });
 
 ////// search
 //Tìm Kiếm Theo tên sản phẩm hoặc danh mục
@@ -91,60 +68,7 @@ router.get('/sap-xep', async (req, res) =>{
     return res.json(arr_product)
 })
 
-///// Mua Sản Phẩm
 
-router.post('/mua-san-pham',[Authentiaction.requireUser] ,async(req, res)=>{
-    let don_hang = req.body;
-    let id_nguoi_mua = req.accessTokenPayload.id || 0;
-
-    let sp = await sanPhamModel.findById(don_hang.id_sp)
-    if(sp.length != 0) {
-        sp = sp[0]
-    } else{
-        return res.json({
-            messeage: "product not found"
-        })
-    }
-    
-    if(sp.isLocked == true){
-        return res.json({
-            messeage: "product is locked"
-        })
-    }
-    
-    
-    const don_hang_rs = {
-        id_sp: don_hang.id_sp,
-        id_nguoi_mua,
-        id_nguoi_ban: sp.id_nguoi_ban,
-        gia_mua: sp.gia_mua_ngay,
-        ngay_dat_hang: new Date(),
-    };
-    console.log(sp)
-    console.log(don_hang_rs)
-
-    await donHangModel.themDonHang(don_hang_rs);
-    /// thông báo cho người mua
-    await mailer.send({
-        from: "online.auction.11team@gmail.com",
-        to: `${sp.email}`,
-        subject: `OnlineAuction11: Món Hàng ${sp.ten_sp} của bạn đã kết thúc và không có ai đấu giá.`,
-        html: `
-              Xin chào ${sp.ho_ten}, Món hàng ${sp.ten_sp} của bạn đã kết thúc.
-              <br> 
-                  Chúng tôi rất tiếc khi không có người đấu giá, bạn có thể mở lại cuộc đấu giá trong trình quản lí trang web
-              <br>
-              (Đây là thư tự động vui lòng không phản hồi)
-              `,
-    });
-    /// khóa toàn bộ cuộc đấu giá đang diễn ra
-    await dauGiaModel.updateStatus(sp.id_sp, 1)
-    
-    await sanPhamModel.updateStatus(sp.id_sp, 1);
-    return res.json({
-        messeage:"product buy done"
-    })
-})
 
 ///// get details
 
@@ -218,52 +142,5 @@ router.get("/5-san-pham-gia-cao-nhat", async (req, res)=>{
 
 //// CRUD
 
-router.post('/them-san-pham',[upload.any(), Authentiaction.requireUser, Authentiaction.requireSeller],async (req, res)=>{
-    const product = req.body;
-    let id_nguoi_ban = req.accessTokenPayload.id || 0;
-    console.log("id nguoi a" + id_nguoi_ban)
-    let anh_arr = req.files[0].originalname.split(".")
-    let anh = anh_arr[0] + uuidv4().toString() + "." + anh_arr[1]; 
-    product.anh = anh
-    product.publish_date = new Date()
-    if(id_nguoi_ban == 0){
-        res.json({
-            messeage: "seller not found"
-        })
-    }
-    if(product.publish_date > product.end_date){
-        res.json({
-            messeage: "input not valid"
-        })
-    }
-    product.id_nguoi_ban = id_nguoi_ban
-
-    if(product.isGiaHan == 1) {
-        let end_date = new Date(product.end_date);
-        end_date = new Date(end_date.getTime() + 10*60000);
-        product.end_date = end_date
-    }
-
-    const result = await sanPhamModel.add(product)
-    try{
-        for(let i = 0;i < req.files.length;i++){
-             if(i != 0) anh = req.files[i].originalname.split(".")[0] + uuidv4().toString() 
-             let res = await cloudinary.uploader.upload(`data:${req.files[i].mimetype};base64,${req.files[i].buffer.toString('base64')}`,
-             {resource_type: "image", public_id: `product/${anh}`,
-             overwrite: false}, function(error) {   });
-             // console.log(res)
-             // anh.id_sp = result
-             await anhModel.add({
-                ten: anh + "." + req.files[i].originalname.split(".")[1],
-                id_sp: result
-            })
-        }
-    } catch(err){} 
-    product.path = Utils.toPath(product.ten, result);
-    return res.json({
-        messeage: "Add product",
-        product: product
-    })
-})
 
 module.exports = router;

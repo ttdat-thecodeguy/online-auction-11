@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const sanPhamModel = require("../services/sanPhamModel");
-const dauGiaModel = require("../services/dauGiaModel");
+const sanPhamModel = require("../../services/sanPhamModel");
+const dauGiaModel = require("../../services/dauGiaModel");
 
 router.post("/tham-gia", async function (req, res) {
   /*  

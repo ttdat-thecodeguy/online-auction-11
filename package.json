@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node main.js",
-    "cron":"node main-cron.js",
+    "cron": "node main-cron.js",
     "dev": "nodemon main.js"
   },
   "author": "",
@@ -33,6 +33,7 @@
     "mysql2": "^2.2.5",
     "nodemailer": "^6.6.3",
     "randomstring": "^1.2.1",
+    "socket.io": "^4.2.0",
     "swagger-ui-express": "^4.1.6",
     "uuid": "^8.3.2",
     "uuid-token-generator": "^1.0.0",

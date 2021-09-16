@@ -1,6 +1,6 @@
 const express = require("express");
-const taiKhoanModel = require("../services/taiKhoanModel");
-const mailer = require("../utils/mailer");
+const taiKhoanModel = require("../../services/taiKhoanModel");
+const mailer = require("../../utils/mailer");
 const bcrypt = require("bcrypt");
 
 const router = express.Router();

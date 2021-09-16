@@ -1,9 +1,9 @@
 const express = require('express');
-const sanPhamModel = require('../services/sanPhamModel');
+const sanPhamModel = require('../../services/sanPhamModel');
 const router = express.Router();
 
-const yeuThichModel = require('../services/yeuThichModel');
-const Utils = require('../utils/Utils');
+const yeuThichModel = require('../../services/yeuThichModel');
+const Utils = require('../../utils/Utils');
 
 router.get('/xem-danh-sach', async function (req, res) {
     const id = req.accessTokenPayload.id || 0;

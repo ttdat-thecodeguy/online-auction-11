@@ -11,18 +11,26 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// const swaggerUi = require('swagger-ui-express'),
-// swaggerDocument = require('./swagger.json')
 
+// const socketIo = require("socket.io")(app, {
+//     cors: {
+//         origin: "*",
+//     }
+// }); 
+
+app.use('/', require('./routes/BaoMat'));
+app.use('/api/san-pham' ,require('./routes/SanPham'))
+app.use('/api/danh-muc', require('./routes/DanhMuc'))
 
 ///// user - bidger //// Dat
-app.use('/', require('./routes/BaoMat'));
-app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/TaiKhoan'))
-app.use('/api/tai-khoan/yeu-thich', Authentiaction.requireUser, require('./routes/YeuThich'))
-app.use('/api/san-pham' ,require('./routes/SanPham'))
-app.use('/api/dau-gia',[Authentiaction.requireUser, Authentiaction.requireDiemDanhGia] ,require('./routes/DauGia'))
+app.use('/api/tai-khoan',  require('./routes/Bidder/SanPham'))
+app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/Bidder/TaiKhoan'))
+app.use('/api/tai-khoan/yeu-thich', Authentiaction.requireUser, require('./routes/Bidder/YeuThich'))
+app.use('/api/dau-gia',[Authentiaction.requireUser, Authentiaction.requireDiemDanhGia] ,require('./routes/Bidder/DauGia'))
 
-////// user - seller /// dat
+//// user - seller //// Dat
+
+app.use('/api/nguoi-ban', require('./routes/Seller/SanPham'))
 app.use('/api/tai-khoan/don-hang', [Authentiaction.requireUser, Authentiaction.requireSeller], require('./routes/Seller/DonHang'))
 
 //// admin // Khương Nguyễn

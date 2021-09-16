@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Sep 15, 2021 at 11:30 AM
+-- Generation Time: Sep 16, 2021 at 06:21 AM
 -- Server version: 5.7.28
 -- PHP Version: 7.3.12
 
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `dau_gia` (
   `gia_tra_cao_nhat` int(11) NOT NULL,
   `ngay_dat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ngay_ket_thuc` timestamp NULL DEFAULT NULL,
-  `isLocked` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_dau_gia`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `dau_gia` (
 -- Dumping data for table `dau_gia`
 --
 
-INSERT INTO `dau_gia` (`id_dau_gia`, `id_sp`, `id_nguoi_ban`, `gia_khoi_diem`, `id_tra_cao_nhat`, `gia_tra_cao_nhat`, `ngay_dat`, `ngay_ket_thuc`, `isLocked`) VALUES
+INSERT INTO `dau_gia` (`id_dau_gia`, `id_sp`, `id_nguoi_ban`, `gia_khoi_diem`, `id_tra_cao_nhat`, `gia_tra_cao_nhat`, `ngay_dat`, `ngay_ket_thuc`, `status`) VALUES
 (3, 24, 0, 2800, 1, 3000, '2021-09-13 07:51:00', '2021-09-11 03:42:15', 1),
 (7, 24, 0, 3000, 1, 3000, '2021-09-13 09:15:00', '2021-09-11 03:42:15', 1),
 (8, 24, 0, 3020, 1, 3020, '2021-09-13 09:15:26', '2021-09-11 03:42:15', 1),
@@ -187,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `quyen_han` (
 --
 
 INSERT INTO `quyen_han` (`id_quyen_han`, `ten`) VALUES
-(1, 'Biger'),
+(1, 'Bidder'),
 (2, 'Seller'),
 (3, 'Admin');
 
@@ -258,6 +258,28 @@ INSERT INTO `tai_khoan` (`id_nguoi_dung`, `email`, `ho_ten`, `ngay_sinh`, `dia_c
 (3, 'xegela5358@posiklan.com', 'abcf', NULL, '123 hung vuong', '$2b$10$I.bs9K2p1HJiQFPnbL3SJe10XpdYTe5Ftf49X6TtfdDeCXrS8oJuy', 1, NULL, 0, 0, '2021-09-08 03:23:35'),
 (5, 'gahowa2784@posiklan.com', 'adminstrator', NULL, '123 hung vuong', '$2b$10$213eVEt2x/XP9gVUaii0BuXLEDWES/4jmXUONdd56Fl69U0KAwmfG', 1, NULL, 1, 1, '2021-09-08 17:35:17'),
 (6, 'ttdat17ck1@gmail.com', 'Admin_TTD', NULL, '123 hung vuong', '$2b$10$QGDfKZzUQhOyw/gH./Tp2.WN/18usVeJWT4GrPak1.zF0gCYfNY9O', 1, NULL, 0, 0, '2021-09-16 10:03:07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trang_thai`
+--
+
+DROP TABLE IF EXISTS `trang_thai`;
+CREATE TABLE IF NOT EXISTS `trang_thai` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ten` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `trang_thai`
+--
+
+INSERT INTO `trang_thai` (`id`, `ten`) VALUES
+(1, 'Kích Hoạt'),
+(2, 'Khóa'),
+(3, 'Chờ');
 
 -- --------------------------------------------------------
 

@@ -76,7 +76,7 @@ var job = new CronJob(
           await donHangModel.themDonHang(don_hang);
 
           /// khóa toàn bộ cuộc đấu giá trước lại
-          await dauGiaModel.updateStatus(products[i].id_sp, 1)
+          await dauGiaModel.updateStatus(products[i].id_sp, 2)
           
           /// khóa toàn bộ sản phẩm lại
           await sanPhamModel.updateStatus(products[i].id_sp, 1);
