@@ -87,7 +87,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
         //// nâng giá khởi điểm
         if(cao_nhat.gia_khoi_diem < dat_gia){
            await dauGiaModel.add(dau_gia_rs);
-
+           
            let luotdaugia = luot_dau_gia + 1;
            await sanPhamModel.updateLuotDauGia(luotdaugia);
 
@@ -114,6 +114,47 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
   }
 });
 
+
+/// từ chối lượt ra giá của người cao nhất
+router.get("/tu-choi-ra-gia", [Authentication.requireUser, Authentication.requireSeller] ,async (req, res)=>{
+  const id_nguoi_ban = req.accessTokenPayload.id || 0;
+  const id_sanpham = req.query.san_pham;
+  
+  let san_pham = await sanPhamModel.findById(id_sanpham);
+  if(san_pham.length == 0){
+    return res.json({
+      messeage: "product not found"
+    })
+  }
+  ///// kiểm tra user seller này có sở hữu sản phẩm này không
+
+  if(id_nguoi_ban != san_pham[0].id_nguoi_ban){
+    return res.json({
+      messeage: "unauthorized"
+    }).status(401)
+  }
+
+  let count = await dauGiaModel.countDauGiaBySanPham(id_sanpham);
+  if(count == 0 || count == null){
+    return res.json({
+      messeage: "auction is empty"
+    }).status(500)
+  }
+  let aff_rows = await dauGiaModel.khoaDauGiaCaoNhat(id_sanpham)
+  if(aff_rows == 0){
+    return res.json({
+      messeage: "something went wrong"
+    })
+  }
+  return res.json({
+    messeage: "remove top auction"
+  })
+
+
+
+
+})
+
 router.get('/lich-su', async (req, res)=>{
   let history = await 
                   dauGiaModel.findByIdSanPham(req.query.san_pham)
@@ -121,8 +162,6 @@ router.get('/lich-su', async (req, res)=>{
     his.hoten_mask = Utils.masking(his.ho_ten)
     return {...his}
   })
-
-  
   return res.json(history).end()
 })
 

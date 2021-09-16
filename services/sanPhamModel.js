@@ -27,7 +27,7 @@ function mapProduct() {
 }
 module.exports = {
   findAll() {
-    return db(table);
+    return mapProduct().andWhere("isLocked", 0).offset(offset).limit(per_page);
   },
   findAllKetThuc(){
     return db(table)
