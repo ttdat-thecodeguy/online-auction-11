@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
+const Authentication = require('../../middlewares/auth')
+
 const sanPhamModel = require("../../services/sanPhamModel");
 const dauGiaModel = require("../../services/dauGiaModel");
+const Utils = require("../../utils/Utils");
 
-router.post("/tham-gia", async function (req, res) {
+router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemDanhGia] ,async function (req, res) {
   /*  
         id_sp,
         gia_dat
@@ -110,6 +113,19 @@ router.post("/tham-gia", async function (req, res) {
     }
   }
 });
+
+router.get('/lich-su', async (req, res)=>{
+  let history = await 
+                  dauGiaModel.findByIdSanPham(req.query.san_pham)
+  history = history.map(his => {
+    his.hoten_mask = Utils.masking(his.ho_ten)
+    return {...his}
+  })
+
+  
+  return res.json(history).end()
+})
+
 
 ///////////// API CHỈ ĐỂ TEST
 

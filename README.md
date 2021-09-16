@@ -17,3 +17,7 @@
 
 -ttdat17ck1@gmail.com
 -12345
+
+- /api/danh-gia/danh-gia-khach-hang POST
+- /api/dau-gia/lich-su?san_pham= <được biến động liên tục> view sản phẩm
+ngày đặt    người mua mask   giá mua

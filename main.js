@@ -26,7 +26,7 @@ app.use('/api/danh-muc', require('./routes/DanhMuc'))
 app.use('/api/tai-khoan',  require('./routes/Bidder/SanPham'))
 app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/Bidder/TaiKhoan'))
 app.use('/api/tai-khoan/yeu-thich', Authentiaction.requireUser, require('./routes/Bidder/YeuThich'))
-app.use('/api/dau-gia',[Authentiaction.requireUser, Authentiaction.requireDiemDanhGia] ,require('./routes/Bidder/DauGia'))
+app.use('/api/dau-gia' ,require('./routes/Bidder/DauGia'))
 
 //// user - seller //// Dat
 

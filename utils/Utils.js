@@ -25,9 +25,19 @@ module.exports = {
     
         product.path = module.exports.toPath(product.ten_sp, id);
         return product
+    },
+    masking: (str)=>{
+        let idx = Math.round(str.length / 2) 
+        return replaceBetween(0, idx, "*", str)
     }
 
 }
+
+function replaceBetween(start, end, chr, str) {
+    let masking = ''
+    for(let i = start; i < end;i++) masking += chr
+    return masking + str.substring(end);
+};
 
 function removeTV(str){
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
