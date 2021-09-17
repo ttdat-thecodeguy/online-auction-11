@@ -26,8 +26,6 @@ require('moment/locale/vi')
 
 moment.locale('vi')
 
-
-
 module.exports = {
     doiTiengViet : (str) => {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -36,9 +34,7 @@ module.exports = {
         str = str.toLowerCase()
         let arr = str.split(" ");
         let path = id + "-";
-        for(let i = 0;i < arr.length - 1;i++){
-            path += removeTV(arr[i]) + "-";
-        }
+        for(let i = 0;i < arr.length - 1;i++) path += removeTV(arr[i]) + "-";
         return (path + removeTV(arr[arr.length - 1])    )
     },
     mapProduct : (product, id, anh) => {
@@ -53,15 +49,25 @@ module.exports = {
         delete product.id_danh_muc
         delete product.ten_danh_muc
         
-        var m =  moment(product.end_date);
+        var e =  moment(product.end_date);
+        var p = moment(product.publish_date);
+
         var today = moment().startOf('day');
-        var sec = Math.round(moment.duration(m - today).asSeconds());
 
+        var sec_end_date = Math.round(moment.duration(e - today).asSeconds());
+        var sec_publish_date = Math.round(moment.duration(today - p).asSeconds());
+        
+        product.isMoi = false
+        product.relative_publish_date = null
         product.relative_end_date = null
+        
+        if(sec_publish_date < 3600){
+            product.isMoi = true
+            product.relative_publish_date = p.fromNow()
+        }
 
-
-        if(sec < 259200){
-            product.relative_end_date = m.fromNow()
+        if(sec_end_date < 259200){
+            product.relative_end_date = e.fromNow()
         }
 
         product.path = module.exports.toPath(product.ten_sp, id);

@@ -66,7 +66,6 @@ router.get('/tim-kiem', async (req, res)=>{
                 product = await sanPhamModel.filterByCateIdWithPaging(parseInt(cate), offset, per_page,"gia_hien_tai", "asc")
             }
         
-
             t = await sanPhamModel.countByCateId(parseInt(cate))
         }
     }
