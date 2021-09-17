@@ -28,41 +28,54 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
 
 
   if (now > expired) {
-    res.json({
+    return res.status(400).json({
       messeage: "your product is expired",
       isWin: false
     });
+  } 
+
+  /// nguoi ban khong duoc dau gia
+  if(id == sp.id_nguoi_ban){
+    return res.status(400).json({
+      messeage: "seller not auction this product",
+      isWin: false
+    })
   }
-  if ( (sp.gia_dat + sp.buoc_gia) > dat_gia) {
+  
+  let luot_dau_gia = await dauGiaModel.countDauGiaBySanPham(id_sp);
+  luot_dau_gia = luot_dau_gia.count
+  
+  ///// set lại giá đặt nếu giá đặt = 0
+
+  if(sp.gia_hien_tai == 0){
+      if(sp.buoc_gia == 0) gia_dat = 10000;
+      else gia_dat = sp.buoc_gia;
+  } else{
+      gia_dat = sp.gia_hien_tai
+  }
+
+  
+  // khởi tạo kết quả
+  let dau_gia_rs = {
+    id_sp,
+    gia_khoi_diem: gia_dat,
+    id_tra_cao_nhat: id,
+    gia_tra_cao_nhat: dat_gia,
+    id_nguoi_ban: sp.id_nguoi_ban,
+    ngay_ket_thuc: sp.end_date,
+    status: 1
+  };
+
+  if ( (sp.gia_hien_tai + sp.buoc_gia) > dat_gia) {
+
+    dau_gia_rs.status = 2
+    await dauGiaModel.add(dau_gia_rs);
+
     return res.json({
         messeage: "lose. need higher price",
         isWin: false
       })
   }
-  let luot_dau_gia = await dauGiaModel.countDauGiaBySanPham(id_sp);
-
-  ///// set lại giá đặt nếu giá đặt = 0
-  let gia_dat = sp.gia_dat == 0 ? (sp.buoc_gia == 0 ? 10000 : sp.buoc_gia ) : sp.gia_dat
-
-  if(sp.gia_dat == 0){
-      if(sp.buoc_gia == 0) gia_dat = 10000;
-      else gia_dat = sp.buoc_gia;
-  } else{
-      gia_dat = sp.gia_dat
-  }
-
-  console.log(gia_dat)
-  
-  // khởi tạo kết quả
-  let dau_gia_rs = {
-    id_sp,
-    gia_khoi_diem: parseInt(2000),
-    id_tra_cao_nhat: id,
-    gia_tra_cao_nhat: dat_gia,
-    id_nguoi_ban: sp.id_nguoi_ban,
-    ngay_ket_thuc: sp.end_date
-  };
-
 
   /// nếu chưa có lượt đấu giá nào cho sp này
   if (luot_dau_gia == 0) {
@@ -70,7 +83,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
 
     /// tăng lượt đấu giá
     let luotdaugia = luot_dau_gia + 1;
-    await sanPhamModel.updateLuotDauGia(luotdaugia);
+    await sanPhamModel.updateLuotDauGia(id_sp,luotdaugia);
     await sanPhamModel.updateGiaHT(id_sp, gia_dat)
 
     return res.json({ messeage: "win", isWin: true, gia_hien_tai: gia_dat}).status(200).end();
@@ -79,19 +92,23 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
     // find người đấu giá cao nhất
     let cao_nhat = await dauGiaModel.findDauGiaCaoNhat(id_sp);
 
-    console.log(cao_nhat)
 
     if(  (cao_nhat.gia_tra_cao_nhat + sp.buoc_gia) > dat_gia){
+
         dau_gia_rs.gia_khoi_diem = dat_gia;
         dau_gia_rs.id_tra_cao_nhat = cao_nhat.id_tra_cao_nhat
         //// khi giá khởi điểm của top ở dưới mức đặt giá
         //// nâng giá khởi điểm
-        if(cao_nhat.gia_khoi_diem < dat_gia){
+
+        if(cao_nhat.gia_tra_cao_nhat < dat_gia){
            await dauGiaModel.add(dau_gia_rs);
            
            let luotdaugia = luot_dau_gia + 1;
-           await sanPhamModel.updateLuotDauGia(luotdaugia);
+           await sanPhamModel.updateLuotDauGia(id_sp,luotdaugia);
            await sanPhamModel.updateGiaHT(id_sp, dau_gia_rs.gia_khoi_diem)
+        } else{
+          dau_gia_rs.status = 2
+          await dauGiaModel.add(dau_gia_rs);
         }
 
         return res.json({
@@ -107,7 +124,8 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
 
         //// tăng lượt đấu giá
         let luotdaugia = luot_dau_gia + 1;
-        await sanPhamModel.updateLuotDauGia(luotdaugia);
+        
+        await sanPhamModel.updateLuotDauGia(id_sp,luotdaugia);
         await sanPhamModel.updateGiaHT(id_sp, cao_nhat.gia_tra_cao_nhat)
 
         // thông báo thắng cuộc
@@ -151,10 +169,6 @@ router.get("/tu-choi-ra-gia", [Authentication.requireUser, Authentication.requir
   return res.json({
     messeage: "remove top auction"
   })
-
-
-
-
 })
 
 router.get('/lich-su', async (req, res)=>{
