@@ -18,17 +18,20 @@ app.use(express.json());
 //     }
 // }); 
 
+///// Guest
+
 app.use('/', require('./routes/BaoMat'));
 app.use('/api/san-pham' ,require('./routes/SanPham'))
 app.use('/api/danh-muc', require('./routes/DanhMuc'))
 
-///// user - bidger //// Dat
+///// user - bidger 
 app.use('/api/tai-khoan',  require('./routes/Bidder/SanPham'))
 app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/Bidder/TaiKhoan'))
+app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/Bidder/DanhGia'))
 app.use('/api/tai-khoan/yeu-thich', Authentiaction.requireUser, require('./routes/Bidder/YeuThich'))
 app.use('/api/dau-gia' ,require('./routes/Bidder/DauGia'))
 
-//// user - seller //// Dat
+//// user - seller 
 
 app.use('/api/nguoi-ban', require('./routes/Seller/SanPham'))
 app.use('/api/tai-khoan/don-hang', [Authentiaction.requireUser, Authentiaction.requireSeller], require('./routes/Seller/DonHang'))

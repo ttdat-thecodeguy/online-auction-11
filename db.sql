@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `dau_gia` (
   `gia_tra_cao_nhat` int(11) NOT NULL,
   `ngay_dat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ngay_ket_thuc` timestamp NULL DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_dau_gia`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 

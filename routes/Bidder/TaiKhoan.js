@@ -20,6 +20,13 @@ router.get("/details", async function (req, res) {
   return res.json(user);
 });
 
+///////////// LỊCH SỬ ĐẤU GIÁ
+
+router.get("/lich-su-dau-gia",async (req, res)=>{
+  const id = req.accessTokenPayload.id || 0;
+})
+
+
 router.post("/doi-mat-khau", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
   const user = await taiKhoanModel.findById(id);
@@ -44,51 +51,6 @@ router.post("/doi-mat-khau", async (req, res) => {
     messeage: "password is updated",
   });
 });
-
-
-router.patch("/nang-diem-danh-gia", async (req, res)=>{
-  const id = req.accessTokenPayload.id || 0;
-  const id_target = req.query.target
-  if(id == id_target){
-    return res.json({
-      messeage: "you must not evaluate your self"
-    })
-  }
-  const user = await taiKhoanModel.findById(id_target);
-  if (user == null || user.OTP != null) {
-    res.status(401).json({
-      messeage: "user not found or invalid",
-    });
-  }
-  let diem = user.diem_danhgia_duong + 1
-  await taiKhoanModel.updateNangDiemDanhGia(id_target, diem)
-  return res.json({
-    messeage:"evaluate done"
-  })
-
-})
-
-router.patch("/ha-diem-danh-gia", async (req, res)=>{
-  const id = req.accessTokenPayload.id || 0;
-  const id_target = req.query.target
-  if(id == id_target){
-    return res.json({
-      messeage: "you must not evaluate your self"
-    })
-  }
-  const user = await taiKhoanModel.findById(id_target);
-  if (user == null || user.OTP != null) {
-    res.status(401).json({
-      messeage: "user not found or invalid",
-    });
-  }
-  let diem = user.diem_danhgia_am + 1
-  await taiKhoanModel.updateHaDiemDanhGia(id_target, diem)
-  return res.json({
-    messeage:"evaluate done"
-  })
-})
-
 
 router.patch("/cap-nhat", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
