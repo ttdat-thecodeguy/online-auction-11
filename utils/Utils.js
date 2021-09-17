@@ -57,11 +57,11 @@ module.exports = {
         var today = moment().startOf('day');
         var sec = Math.round(moment.duration(m - today).asSeconds());
 
-        product.thoi_gian_tuong_doi = null
+        product.relative_end_date = null
 
 
         if(sec < 259200){
-            product.thoi_gian_tuong_doi = m.fromNow()
+            product.relative_end_date = m.fromNow()
         }
 
         product.path = module.exports.toPath(product.ten_sp, id);

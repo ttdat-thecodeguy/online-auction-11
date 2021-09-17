@@ -11,13 +11,63 @@ const Utils = require('../utils/Utils')
 router.get('/tim-kiem', async (req, res)=>{
     let name = req.query.name;
     let cate = req.query.cate;
+    
+    //// Order
+
+    let time = req.query.orderTime
+    let price = req.query.orderPrice
+    
+    //// paging
+    var per_page = req.query.per_page || 10;
+    var page = req.query.current_page || 1;
+
+    if (page < 1) page = 1;
+    var offset = (page - 1) * per_page;
+
     let product = null;
-    if(name != null && cate == null) product = await sanPhamModel.findByName(name)
+    
+    let t = null
+    if(name != null && cate == null){ 
+        product = await sanPhamModel.findByNameWithPaging(name, offset, per_page)
+
+        /// order by name
+        if(time != null && price == null){
+            product = await sanPhamModel.filterByNameWithPaging(name, offset, per_page, "end_date", "desc")
+        }
+        else if(time == null && price != null){
+            product = await sanPhamModel.filterByNameWithPaging(name, offset, per_page,"gia_hien_tai", "asc")
+        }
+     
+        t = await sanPhamModel.countByName(name)
+    }
+
     else if(cate != null && name == null) {
         if(isNaN(parseInt(cate))){
-            product = await sanPhamModel.findByCateName(cate)
+            product = await sanPhamModel.findByCateName(cate, offset, per_page)
+
+            /// order by cate id
+            if(time != null && price == null){
+                product = await sanPhamModel.filterByCateNameWithPaging(cate, offset, per_page, "end_date", "desc")
+            }
+            else if(time == null && price != null){
+                product = await sanPhamModel.filterByCateNameWithPaging(cate, offset, per_page, "gia_hien_tai", "asc")
+            }
+        
+
+            t = await sanPhamModel.countByCateName(cate)
         }else{
-            product = await sanPhamModel.findByCateId(parseInt(cate))
+            product = await sanPhamModel.findByCateId(parseInt(cate),offset, per_page)
+
+            /// order by cate id
+            if(time != null && price == null){
+                product = await sanPhamModel.filterByCateIdWithPaging(parseInt(cate), offset, per_page,"end_date", "desc")
+            }
+            else if(time == null && price != null){
+                product = await sanPhamModel.filterByCateIdWithPaging(parseInt(cate), offset, per_page,"gia_hien_tai", "asc")
+            }
+        
+
+            t = await sanPhamModel.countByCateId(parseInt(cate))
         }
     }
     else if(name == null && cate == null) {
@@ -29,46 +79,59 @@ router.get('/tim-kiem', async (req, res)=>{
             messeage: "name or cate query"
         }).status(500)
     }
+    let to = offset + product.length;
+    let last_page = Math.ceil(t.count / per_page);
+
     let arr_product = []
     for(let i = 0;i < product.length;i++){
         let anh = await sanPhamModel.findImageById(product[i].id_sp)
         arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
     }
-    return res.json(arr_product)
+    return res.json({
+        products: arr_product,
+        count: t.count,
+        to,
+        last_page
+    })
 })
 
-router.get('/sap-xep', async (req, res) =>{
-    let time = req.query.time
-    let price = req.query.price
-    let product = null;
-    if(time == null && price == null){
-        res.json({
-            messeage: "no condition query"
-        }).status(500)
-    }
 
-    else if(time != null && price == null){
-        product = await sanPhamModel.filterSanPham("end_date", "desc", Number.MAX_SAFE_INTEGER)
-    }
-    else if(time == null && price != null){
-        product = await sanPhamModel.filterSanPhamTheoGiaHT("gia_hien_tai", "asc", Number.MAX_SAFE_INTEGER)
-    }
-    else {
-        return res.json({
-            messeage: "time or price query"
-        })
-    }
-    let arr_product = []
-    for(let i = 0;i < product.length;i++){
-        let anh = await sanPhamModel.findImageById(product[i].id_sp)
-        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
-    }
-    return res.json(arr_product)
-})
+///////////// GARBAGE
+
+// router.get('/sap-xep', async (req, res) =>{
+//     let time = req.query.time
+//     let price = req.query.price
+//     let product = null;
+//     if(time == null && price == null){
+//         res.json({
+//             messeage: "no condition query"
+//         }).status(500)
+//     }
+
+//     else if(time != null && price == null){
+//         product = await sanPhamModel.filterSanPham("end_date", "desc", Number.MAX_SAFE_INTEGER)
+//     }
+//     else if(time == null && price != null){
+//         product = await sanPhamModel.filterSanPhamTheoGiaHT("gia_hien_tai", "asc", Number.MAX_SAFE_INTEGER)
+//     }
+//     else {
+//         return res.json({
+//             messeage: "time or price query"
+//         })
+//     }
+//     let arr_product = []
+//     for(let i = 0;i < product.length;i++){
+//         let anh = await sanPhamModel.findImageById(product[i].id_sp)
+//         arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
+//     }
+//     return res.json(arr_product)
+// })
 
 
 
 ///// get details
+
+//// không hiện giá đặt chỉ hiện giá mua ngay và giá hiện tại
 
 router.get('/details/:name', async (req, res) => {
     let id = req.params.name.split("-")[0] || 0;
