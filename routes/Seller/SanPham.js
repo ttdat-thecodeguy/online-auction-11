@@ -13,7 +13,7 @@ const sanPhamModel = require('../../services/sanPhamModel')
 const Utils = require('../../utils/Utils')
 
 
-router.post('/them-san-pham',[upload.any(), Authentiaction.requireUser, Authentiaction.requireSeller],async (req, res)=>{
+router.post('/them-san-pham',[upload.any()],async (req, res)=>{
     const product = req.body;
     let id_nguoi_ban = req.accessTokenPayload.id || 0;
     console.log("id nguoi a" + id_nguoi_ban)

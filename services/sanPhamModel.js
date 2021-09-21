@@ -35,6 +35,9 @@ module.exports = {
     .join("tai_khoan", "san_pham.id_nguoi_ban", "tai_khoan.id_nguoi_dung")
     .where("end_date","<",new Date(Date.now())).andWhere("isLocked", 0);
   },
+  filterSanPham(condition, sort, size){
+    return mapProduct().where("isLocked", 0).orderBy(condition, sort).limit(size)
+  },
   filterAllWithPaging(offset, per_page,condition, sort){
     return mapProduct().where("isLocked", 0).orderBy(condition, sort).limit(per_page).offset(offset)
   },

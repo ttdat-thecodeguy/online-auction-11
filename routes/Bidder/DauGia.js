@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Authentication = require('../../middlewares/auth')
 
+const taiKhoanModel = require("../../services/taiKhoanModel")
 const sanPhamModel = require("../../services/sanPhamModel");
 const dauGiaModel = require("../../services/dauGiaModel");
 const Utils = require("../../utils/Utils");
@@ -26,7 +27,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
   let now = new Date(Date.now());
   let expired = new Date(sp.end_date);
 
-
+  /// Quá thời hạn
   if (now > expired) {
     return res.status(400).json({
       messeage: "your product is expired",
@@ -42,6 +43,8 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
     })
   }
   
+  
+
   let luot_dau_gia = await dauGiaModel.countDauGiaBySanPham(id_sp);
   luot_dau_gia = luot_dau_gia.count
   
@@ -59,13 +62,28 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
   let dau_gia_rs = {
     id_sp,
     gia_khoi_diem: gia_dat,
+    id_nguoi_dau_gia: id,
     id_tra_cao_nhat: id,
     gia_tra_cao_nhat: dat_gia,
     id_nguoi_ban: sp.id_nguoi_ban,
     ngay_ket_thuc: sp.end_date,
     status: 1
   };
+  //// cap nhat luot dau gia khi da tham gia
+  let luotdaugia = luot_dau_gia + 1;
+  await sanPhamModel.updateLuotDauGia(id_sp,luotdaugia);
 
+  // kiểm tra người đấu giá là chiếu mới
+  let nguoi_dau_gia = await taiKhoanModel.findById(id);
+  if(nguoi_dau_gia.diem_danhgia_duong == 0 && nguoi_dau_gia.diem_danhgia_am == 0){
+    //// pending
+    dau_gia_rs.status = 3
+    await dauGiaModel.add(dau_gia_rs);
+    return res.json({
+      messeage: "you need waiting for auction"
+    })
+  }
+  
   if ( (sp.gia_hien_tai + sp.buoc_gia) > dat_gia) {
 
     dau_gia_rs.status = 2
@@ -81,9 +99,6 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
   if (luot_dau_gia == 0) {
     await dauGiaModel.add(dau_gia_rs);
 
-    /// tăng lượt đấu giá
-    let luotdaugia = luot_dau_gia + 1;
-    await sanPhamModel.updateLuotDauGia(id_sp,luotdaugia);
     await sanPhamModel.updateGiaHT(id_sp, gia_dat)
 
     return res.json({ messeage: "win", isWin: true, gia_hien_tai: gia_dat}).status(200).end();
@@ -103,10 +118,8 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
         if(cao_nhat.gia_tra_cao_nhat < dat_gia){
            await dauGiaModel.add(dau_gia_rs);
            
-           let luotdaugia = luot_dau_gia + 1;
-           await sanPhamModel.updateLuotDauGia(id_sp,luotdaugia);
            await sanPhamModel.updateGiaHT(id_sp, dau_gia_rs.gia_khoi_diem)
-        } else{
+        } else {
           dau_gia_rs.status = 2
           await dauGiaModel.add(dau_gia_rs);
         }
@@ -122,10 +135,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
 
         await dauGiaModel.add(dau_gia_rs);
 
-        //// tăng lượt đấu giá
-        let luotdaugia = luot_dau_gia + 1;
-        
-        await sanPhamModel.updateLuotDauGia(id_sp,luotdaugia);
+        //// cap nhat gia
         await sanPhamModel.updateGiaHT(id_sp, cao_nhat.gia_tra_cao_nhat)
 
         // thông báo thắng cuộc
@@ -170,6 +180,7 @@ router.get("/tu-choi-ra-gia", [Authentication.requireUser, Authentication.requir
     messeage: "remove top auction"
   })
 })
+
 
 router.get('/lich-su', async (req, res)=>{
   let history = await 

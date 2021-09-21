@@ -1,6 +1,8 @@
 const express = require("express");
 const taiKhoanModel = require("../../services/taiKhoanModel");
 const mailer = require("../../utils/mailer");
+const dauGiaModel = require("../../services/dauGiaModel");
+
 const bcrypt = require("bcrypt");
 
 const router = express.Router();
@@ -24,6 +26,24 @@ router.get("/details", async function (req, res) {
 
 router.get("/lich-su-dau-gia",async (req, res)=>{
   const id = req.accessTokenPayload.id || 0;
+
+  let rows = await dauGiaModel.findByNguoiDauGia(id)
+  rows = rows.map(r => {
+    return {
+      ten_sp: r.ten_sp,
+      dau_gia: {
+        gia_khoi_diem: r.gia_tra,
+        gia_mua: r.gia_mua
+      },
+      status: {
+        id: r.status,
+        ten: r.ten_status
+      },
+      ngay_dat: r.ngay_dat
+    }
+  })
+  return res.status(200).json(rows)
+
 })
 
 

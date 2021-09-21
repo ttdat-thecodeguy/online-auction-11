@@ -34,7 +34,7 @@ router.get("/nhan-xet-cua-toi", async (req, res)=>{
 router.get("/danh-gia-ve-toi", async (req, res)=>{
   const id = req.accessTokenPayload.id || 0;
   if(id == 0){
-    res.status(401).json({
+    return res.status(401).json({
       messeage: "User Invalid"
     })
   }
@@ -68,7 +68,7 @@ router.post("/nang-diem-danh-gia", async (req, res) => {
   }
   const user = await taiKhoanModel.findById(id_target);
   if (user == null || user.OTP != null) {
-    res.status(401).json({
+    return res.status(401).json({
       messeage: "user not found or invalid",
     });
   }
@@ -101,7 +101,7 @@ router.post("/ha-diem-danh-gia", async (req, res) => {
   }
   const user = await taiKhoanModel.findById(id_target);
   if (user == null || user.OTP != null) {
-    res.status(401).json({
+    return res.status(401).json({
       messeage: "user not found or invalid",
     });
   }

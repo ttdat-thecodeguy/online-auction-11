@@ -168,7 +168,7 @@ router.get("/5-san-pham-gan-ket-thuc", async (req, res)=>{
     let arr_product = []
     for(let i = 0;i < product.length;i++){
         let anh = await sanPhamModel.findImageById(product[i].id_sp)
-        arr_product.push(mapProduct(product[i], product[i].id_sp, anh))
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
     }
     return res.json(arr_product)
 })
