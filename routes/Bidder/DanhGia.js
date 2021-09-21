@@ -6,9 +6,61 @@ const danhGiaModel = require("../../services/danhGiaModel")
 
 /////////// DANH GIA
 
+router.get("/nhan-xet-cua-toi", async (req, res)=>{
+  const id = req.accessTokenPayload.id || 0;
+  if(id == 0){
+    res.status(401).json({
+      messeage: "User Invalid"
+    })
+  }
+  let nhan_xet = await danhGiaModel.findByNguoiDanhGia(id);
+
+  nhan_xet = nhan_xet.map(nx => {
+    return {
+      nguoi_bi_danh_gia:{
+        ho_ten: nx.ho_ten,
+        email: nx.email,
+        diem_duong: nx.diem_danhgia_duong,
+        diem_am: nx.diem_danhgia_am
+      },
+      nhan_xet: nx.nhan_xet,
+      diem: nx.isDuong ? 1 : -1
+    }
+  })
+
+  return res.status(200).json(nhan_xet)
+})
+
+router.get("/danh-gia-ve-toi", async (req, res)=>{
+  const id = req.accessTokenPayload.id || 0;
+  if(id == 0){
+    res.status(401).json({
+      messeage: "User Invalid"
+    })
+  }
+  let nhan_xet = await danhGiaModel.findByNguoiBiDanhGia(id);
+
+  nhan_xet = nhan_xet.map(nx => {
+    return {
+      nguoi_danh_gia:{
+        ho_ten: nx.ho_ten,
+        email: nx.email,
+        diem_duong: nx.diem_danhgia_duong,
+        diem_am: nx.diem_danhgia_am
+      },
+      nhan_xet: nx.nhan_xet,
+      diem: nx.isDuong ? 1 : -1
+    }
+  })
+
+  return res.status(200).json(nhan_xet)
+})
+
 router.post("/nang-diem-danh-gia", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
   const id_target = req.query.target;
+  const nhan_xet = req.body.nhan_xet
+
   if (id == id_target) {
     return res.json({
       messeage: "you must not evaluate your self",
@@ -27,7 +79,7 @@ router.post("/nang-diem-danh-gia", async (req, res) => {
   // them danh gia
   const danhGia = {
     nguoi_danh_gia: id,
-    nguoi_bi_danh_gia: id_bi_danh_gia,
+    nguoi_bi_danh_gia: id_target,
     nhan_xet,
     isDuong: true
   }
@@ -41,8 +93,9 @@ router.post("/nang-diem-danh-gia", async (req, res) => {
 router.post("/ha-diem-danh-gia", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
   const id_target = req.query.target;
+  const nhan_xet = req.body.nhan_xet
   if (id == id_target) {
-    return res.json({
+    return res.status(401).json({
       messeage: "you must not evaluate your self",
     });
   }
@@ -58,7 +111,7 @@ router.post("/ha-diem-danh-gia", async (req, res) => {
   // them danh gia
   const danhGia = {
     nguoi_danh_gia: id,
-    nguoi_bi_danh_gia: id_bi_danh_gia,
+    nguoi_bi_danh_gia: id_target,
     nhan_xet,
     isDuong: false
   }
