@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Sep 16, 2021 at 02:12 PM
+-- Generation Time: Sep 21, 2021 at 09:54 AM
 -- Server version: 5.7.28
 -- PHP Version: 7.3.12
 
@@ -57,6 +57,40 @@ INSERT INTO `anh_san_pham` (`id_anh`, `id_sp`, `ten`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cam_dau_gia`
+--
+
+DROP TABLE IF EXISTS `cam_dau_gia`;
+CREATE TABLE IF NOT EXISTS `cam_dau_gia` (
+  `id_sp` int(11) NOT NULL,
+  `id_nguoi_dung` int(11) NOT NULL,
+  PRIMARY KEY (`id_sp`,`id_nguoi_dung`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cap_danh_muc`
+--
+
+DROP TABLE IF EXISTS `cap_danh_muc`;
+CREATE TABLE IF NOT EXISTS `cap_danh_muc` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ten` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `cap_danh_muc`
+--
+
+INSERT INTO `cap_danh_muc` (`id`, `ten`) VALUES
+(0, 'Điện Thoại '),
+(1, 'Máy Tính');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `danh_gia`
 --
 
@@ -65,10 +99,20 @@ CREATE TABLE IF NOT EXISTS `danh_gia` (
   `id_danh_gia` int(11) NOT NULL AUTO_INCREMENT,
   `nguoi_danh_gia` int(11) NOT NULL,
   `nguoi_bi_danh_gia` int(11) NOT NULL,
-  `diem` int(11) NOT NULL,
   `nhan_xet` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `isDuong` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_danh_gia`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `danh_gia`
+--
+
+INSERT INTO `danh_gia` (`id_danh_gia`, `nguoi_danh_gia`, `nguoi_bi_danh_gia`, `nhan_xet`, `isDuong`) VALUES
+(1, 3, 5, 'Thằng Này Méo đáng tin', 0),
+(2, 3, 5, 'SHOP ĐƯỢC', 1),
+(3, 1, 5, 'sau khi xem xét chúng tôi phát hiện sự gian lận nên lượt đấu giá này sẽ không được chấp nhận', 0),
+(4, 1, 5, 'cảm ơn bạn đã tham gia đấu giá', 1);
 
 -- --------------------------------------------------------
 
@@ -131,24 +175,26 @@ CREATE TABLE IF NOT EXISTS `dau_gia` (
   `id_dau_gia` int(11) NOT NULL AUTO_INCREMENT,
   `id_sp` int(11) NOT NULL,
   `id_nguoi_ban` int(11) NOT NULL,
+  `id_nguoi_dau_gia` int(11) NOT NULL,
   `gia_khoi_diem` int(11) NOT NULL,
   `id_tra_cao_nhat` int(11) NOT NULL,
   `gia_tra_cao_nhat` int(11) NOT NULL,
   `ngay_dat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ngay_ket_thuc` timestamp NULL DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `status` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_dau_gia`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `dau_gia`
 --
 
-INSERT INTO `dau_gia` (`id_dau_gia`, `id_sp`, `id_nguoi_ban`, `gia_khoi_diem`, `id_tra_cao_nhat`, `gia_tra_cao_nhat`, `ngay_dat`, `ngay_ket_thuc`, `status`) VALUES
-(3, 24, 1, 2800, 1, 3000, '2021-09-13 07:51:00', '2021-09-17 03:42:15', 1),
-(7, 24, 1, 3000, 1, 3000, '2021-09-13 09:15:00', '2021-09-17 03:42:15', 1),
-(8, 24, 1, 3020, 1, 3020, '2021-09-13 09:15:26', '2021-09-17 03:42:15', 1),
-(9, 24, 1, 3020, 6, 4000, '2021-09-13 09:16:45', '2021-09-17 03:42:15', 2);
+INSERT INTO `dau_gia` (`id_dau_gia`, `id_sp`, `id_nguoi_ban`, `id_nguoi_dau_gia`, `gia_khoi_diem`, `id_tra_cao_nhat`, `gia_tra_cao_nhat`, `ngay_dat`, `ngay_ket_thuc`, `status`) VALUES
+(27, 24, 1, 3, 4500, 3, 1900, '2021-09-17 15:04:51', '2021-09-18 03:42:15', 2),
+(28, 24, 1, 3, 4500, 3, 2100, '2021-09-17 15:05:06', '2021-09-18 03:42:15', 2),
+(32, 24, 1, 3, 4500, 3, 3200, '2021-09-17 15:10:42', '2021-09-18 03:42:15', 2),
+(33, 24, 1, 3, 4500, 3, 5800, '2021-09-17 15:11:17', '2021-09-18 03:42:15', 1),
+(34, 24, 1, 5, 4500, 5, 5800, '2021-09-21 05:44:13', '2021-09-30 03:42:15', 2);
 
 -- --------------------------------------------------------
 
@@ -168,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `nang_cap_tk` (
 --
 
 INSERT INTO `nang_cap_tk` (`id_nguoi_dung`, `id_quyen_han_mong_muon`) VALUES
-(3, 2);
+(3, 3);
 
 -- --------------------------------------------------------
 
@@ -223,8 +269,8 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
 --
 
 INSERT INTO `san_pham` (`id_sp`, `anh`, `ten`, `id_danh_muc`, `gia_dat`, `gia_hien_tai`, `gia_mua_ngay`, `buoc_gia`, `luot_daugia`, `isGiaHan`, `id_nguoi_ban`, `publish_date`, `end_date`, `mo_ta`, `isLocked`) VALUES
-(24, 'iphone-12-pro-max100dd7f1-973a-4640-9c8d-d66e93ee3c8e.png', 'Điện Thoại IPhone 12 Promax', 3, 2800, 2800, 3000, 50, 4, 0, 1, '2021-09-15 03:42:15', '2021-09-17 03:42:15', 'Đẹp, thởi thượng', 0),
-(25, 'iphone-5sc2eb9cf4-d3b5-4f26-994e-184bc6ff8774.png', 'Điện Thoại IPhone 5s', 3, 4000, 4000, 9000, 150, 0, 0, 1, '2021-09-15 03:42:26', '2021-09-21 03:42:26', 'Đẹp, thởi thượng', 1),
+(24, 'iphone-12-pro-max100dd7f1-973a-4640-9c8d-d66e93ee3c8e.png', 'Điện Thoại IPhone 12 Promax', 3, 4500, 5800, 3000, 50, 2, 0, 1, '2021-09-15 03:42:15', '2021-09-30 03:42:15', 'Đẹp, thởi thượng', 0),
+(25, 'iphone-5sc2eb9cf4-d3b5-4f26-994e-184bc6ff8774.png', 'Điện Thoại IPhone 5s', 3, 4000, 4000, 9000, 150, 0, 0, 1, '2021-09-15 03:42:26', '2021-09-21 03:42:26', 'Đẹp, thởi thượng', 0),
 (26, 'dell-dell-g3-15-3500-gaming-laptop-computer-config-160bac2c0-7994-48b6-9b1e-1011ed032b9d.jpg', 'Máy Tính Dell G3', 4, 6000, 6000, 9000, 130, 0, 0, 1, '2021-09-15 03:42:28', '2021-09-30 03:42:28', 'Đẹp, thởi thượng', 0),
 (28, '637318137488561447_xiaomi-redmi-9a-xanh-dd-bh0db2cb33-3b2a-4237-bb37-0b48366666e5.jpg', 'Điện Thoại Xiaomin 9SE', 6, 1300, 1300, 2400, 100, 0, 0, 1, '2021-09-15 03:42:31', '2021-09-28 03:42:31', 'Đẹp, thởi thượng', 0);
 
@@ -258,7 +304,7 @@ CREATE TABLE IF NOT EXISTS `tai_khoan` (
 INSERT INTO `tai_khoan` (`id_nguoi_dung`, `email`, `ho_ten`, `ngay_sinh`, `dia_chi`, `mat_khau`, `id_quyen_han`, `OTP`, `diem_danhgia_duong`, `diem_danhgia_am`, `expired`) VALUES
 (1, 'nijigi1129@rebation.com', 'John Henry', '2019-07-03 10:00:00.000000', '123 hung vuong', '$2b$10$uBhaNvbi9tiUi2UOGAwBku4YUfZEtOE/2InHBuxFa46Vw.I9wLVoG', 2, NULL, 0, 0, '2021-09-08 03:15:51'),
 (3, 'xegela5358@posiklan.com', 'abcf', NULL, '123 hung vuong', '$2b$10$I.bs9K2p1HJiQFPnbL3SJe10XpdYTe5Ftf49X6TtfdDeCXrS8oJuy', 1, NULL, 0, 0, '2021-09-08 03:23:35'),
-(5, 'gahowa2784@posiklan.com', 'adminstrator', NULL, '123 hung vuong', '$2b$10$213eVEt2x/XP9gVUaii0BuXLEDWES/4jmXUONdd56Fl69U0KAwmfG', 1, NULL, 1, 1, '2021-09-08 17:35:17'),
+(5, 'gahowa2784@posiklan.com', 'adminstrator', NULL, '123 hung vuong', '$2b$10$213eVEt2x/XP9gVUaii0BuXLEDWES/4jmXUONdd56Fl69U0KAwmfG', 1, NULL, 1, 2, '2021-09-08 17:35:17'),
 (6, 'ttdat17ck1@gmail.com', 'hang', NULL, '123 hung vuong', '$2b$10$QGDfKZzUQhOyw/gH./Tp2.WN/18usVeJWT4GrPak1.zF0gCYfNY9O', 1, NULL, 0, 0, '2021-09-16 10:03:07');
 
 -- --------------------------------------------------------

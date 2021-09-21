@@ -65,6 +65,9 @@ module.exports = {
   countByName(name){
     return db(table).count('* as count').where("san_pham.ten", "LIKE" ,"%" + name + "%").andWhere("isLocked", 0).first()
   },
+  findByProductSameCate(cate, size){
+    return mapProduct().where("danh_muc.id_danh_muc", cate).andWhere("isLocked", 0).limit(size)
+  },
   findByCateName(cate, offset, per_page){
     return mapProduct().where("danh_muc.ten", "LIKE" ,"%" + cate + "%").andWhere("isLocked", 0).offset(offset).limit(per_page);
   },

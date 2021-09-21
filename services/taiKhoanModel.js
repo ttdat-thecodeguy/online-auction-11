@@ -35,6 +35,21 @@ module.exports = {
   add(taikhoan) {
     return db(table).insert(taikhoan);
   },
+  findNangCapTK(id_nguoi_dung){
+    return db("nang_cap_tk").where({
+      id_nguoi_dung
+    }).first()
+  },
+  updateYeuCau(id_nguoi_dung, id_quyen_han_mong_muon){
+    return db("nang_cap_tk").where({
+      id_nguoi_dung
+    }).update({
+      id_quyen_han_mong_muon
+    })
+  },
+  addNangCapTK(nang_cap){
+    return db("nang_cap_tk").insert(nang_cap)
+  },
   del(id) {
     return db(table)
       .where("id_nguoi_dung", id)

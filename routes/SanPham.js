@@ -152,8 +152,31 @@ router.get('/details/:name', async (req, res) => {
     }
     let anh = await sanPhamModel.findImageById(id)
     product =  Utils.mapProduct(product[0], id, anh)
+
+    // let product_same_cate = await sanPhamModel.findByProductSameCate(product.danh_muc.id, 5)
+    // let arr_product = []
+    // for(let i = 0;i < product_same_cate.length;i++){
+    //     let anh = await sanPhamModel.findImageById(product_same_cate[i].id_sp)
+    //     arr_product.push(Utils.mapProduct(product_same_cate[i], product_same_cate[i].id_sp, anh))
+    // }
+    // product.same_cate = arr_product
     return res.json(product)
 })
+
+/////////// Product same cate
+
+router.get("/5-san-pham-cung-danh-muc", async (req, res)=>{
+    let danh_muc = req.query.danh_muc
+    let size = req.query.size
+    let product_same_cate = await sanPhamModel.findByProductSameCate(danh_muc, parseInt(size))
+    let arr_product = []
+    for(let i = 0;i < product_same_cate.length;i++){
+        let anh = await sanPhamModel.findImageById(product_same_cate[i].id_sp)
+        arr_product.push(Utils.mapProduct(product_same_cate[i], product_same_cate[i].id_sp, anh))
+    }
+    return res.json(arr_product)
+})
+
 
 ///////////// TRANG CHỦ
 

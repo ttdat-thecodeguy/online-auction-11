@@ -24,28 +24,26 @@ router.get("/details", async function (req, res) {
 
 ///////////// LỊCH SỬ ĐẤU GIÁ
 
-router.get("/lich-su-dau-gia",async (req, res)=>{
+router.get("/lich-su-dau-gia", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
 
-  let rows = await dauGiaModel.findByNguoiDauGia(id)
-  rows = rows.map(r => {
+  let rows = await dauGiaModel.findByNguoiDauGia(id);
+  rows = rows.map((r) => {
     return {
       ten_sp: r.ten_sp,
       dau_gia: {
         gia_khoi_diem: r.gia_tra,
-        gia_mua: r.gia_mua
+        gia_mua: r.gia_mua,
       },
       status: {
         id: r.status,
-        ten: r.ten_status
+        ten: r.ten_status,
       },
-      ngay_dat: r.ngay_dat
-    }
-  })
-  return res.status(200).json(rows)
-
-})
-
+      ngay_dat: r.ngay_dat,
+    };
+  });
+  return res.status(200).json(rows);
+});
 
 router.post("/doi-mat-khau", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
@@ -72,6 +70,44 @@ router.post("/doi-mat-khau", async (req, res) => {
   });
 });
 
+router.get("/yeu-cau-nang-cap", async (req, res) => {
+  const id = req.accessTokenPayload.id || 0;
+  const quyen_han = req.query.quyen_han;
+
+  const user = await taiKhoanModel.findById(id);
+  if (user.id_quyen_han == quyen_han) {
+    return res.status(400).json({
+      messeage: "you are at role",
+    });
+  }
+
+  if (user.id_quyen_han > parseInt(quyen_han)) {
+    return res.status(400).json({
+      messeage: "you cant down role",
+    });
+  }
+
+  const requirement = await taiKhoanModel.findNangCapTK(id)
+  if(requirement != null) {
+    if(requirement.id_quyen_han_mong_muon != quyen_han){
+      await taiKhoanModel.updateYeuCau(id, quyen_han)
+    } else{
+      return res.json({
+        messeage: "you already require it"
+      })
+    }
+  } else{
+    await taiKhoanModel.addNangCapTK({
+      id_nguoi_dung: id,
+      id_quyen_han_mong_muon: quyen_han,
+    });  
+  }
+
+  return res.status(200).json({
+    messeage: "require successful",
+  });
+});
+
 router.patch("/cap-nhat", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
 
@@ -84,10 +120,5 @@ router.patch("/cap-nhat", async (req, res) => {
 
   res.json(account);
 });
-
-
-
-
-
 
 module.exports = router;
