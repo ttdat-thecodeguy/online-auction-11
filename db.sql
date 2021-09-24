@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Sep 21, 2021 at 09:54 AM
+-- Generation Time: Sep 24, 2021 at 04:17 AM
 -- Server version: 5.7.28
 -- PHP Version: 7.3.12
 
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `danh_gia` (
   `nhan_xet` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
   `isDuong` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_danh_gia`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `danh_gia`
@@ -112,7 +112,9 @@ INSERT INTO `danh_gia` (`id_danh_gia`, `nguoi_danh_gia`, `nguoi_bi_danh_gia`, `n
 (1, 3, 5, 'Thằng Này Méo đáng tin', 0),
 (2, 3, 5, 'SHOP ĐƯỢC', 1),
 (3, 1, 5, 'sau khi xem xét chúng tôi phát hiện sự gian lận nên lượt đấu giá này sẽ không được chấp nhận', 0),
-(4, 1, 5, 'cảm ơn bạn đã tham gia đấu giá', 1);
+(4, 1, 5, 'cảm ơn bạn đã tham gia đấu giá', 1),
+(5, 1, 6, 'Người Mua Không Chịu Thanh Toán', 0),
+(6, 1, 3, 'Chúc Mừng Bạn Đã Nhận được hàng', 1);
 
 -- --------------------------------------------------------
 
@@ -152,6 +154,7 @@ CREATE TABLE IF NOT EXISTS `dat_hang` (
   `id_nguoi_mua` int(11) NOT NULL,
   `id_nguoi_ban` int(11) NOT NULL,
   `gia_mua` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '1',
   `ngay_dat_hang` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_sp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -160,9 +163,9 @@ CREATE TABLE IF NOT EXISTS `dat_hang` (
 -- Dumping data for table `dat_hang`
 --
 
-INSERT INTO `dat_hang` (`id_sp`, `id_nguoi_mua`, `id_nguoi_ban`, `gia_mua`, `ngay_dat_hang`) VALUES
-(24, 6, 0, 3020, '2021-09-15 10:31:46'),
-(25, 3, 1, 9000, '2021-09-15 11:16:53');
+INSERT INTO `dat_hang` (`id_sp`, `id_nguoi_mua`, `id_nguoi_ban`, `gia_mua`, `status`, `ngay_dat_hang`) VALUES
+(24, 6, 1, 3020, 3, '2021-09-15 10:31:46'),
+(25, 3, 1, 9000, 2, '2021-09-15 11:16:53');
 
 -- --------------------------------------------------------
 
@@ -271,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
 INSERT INTO `san_pham` (`id_sp`, `anh`, `ten`, `id_danh_muc`, `gia_dat`, `gia_hien_tai`, `gia_mua_ngay`, `buoc_gia`, `luot_daugia`, `isGiaHan`, `id_nguoi_ban`, `publish_date`, `end_date`, `mo_ta`, `isLocked`) VALUES
 (24, 'iphone-12-pro-max100dd7f1-973a-4640-9c8d-d66e93ee3c8e.png', 'Điện Thoại IPhone 12 Promax', 3, 4500, 5800, 3000, 50, 2, 0, 1, '2021-09-15 03:42:15', '2021-09-30 03:42:15', 'Đẹp, thởi thượng', 0),
 (25, 'iphone-5sc2eb9cf4-d3b5-4f26-994e-184bc6ff8774.png', 'Điện Thoại IPhone 5s', 3, 4000, 4000, 9000, 150, 0, 0, 1, '2021-09-15 03:42:26', '2021-09-21 03:42:26', 'Đẹp, thởi thượng', 0),
-(26, 'dell-dell-g3-15-3500-gaming-laptop-computer-config-160bac2c0-7994-48b6-9b1e-1011ed032b9d.jpg', 'Máy Tính Dell G3', 4, 6000, 6000, 9000, 130, 0, 0, 1, '2021-09-15 03:42:28', '2021-09-30 03:42:28', 'Đẹp, thởi thượng', 0),
+(26, 'dell-dell-g3-15-3500-gaming-laptop-computer-config-160bac2c0-7994-48b6-9b1e-1011ed032b9d.jpg', 'Máy Tính Dell G3', 4, 6000, 6000, 9000, 130, 0, 0, 1, '2021-09-15 03:42:28', '2021-09-30 03:42:28', 'Đẹp, thởi thượng, Vừa Vặn Với Mọi Phân Khúc', 0),
 (28, '637318137488561447_xiaomi-redmi-9a-xanh-dd-bh0db2cb33-3b2a-4237-bb37-0b48366666e5.jpg', 'Điện Thoại Xiaomin 9SE', 6, 1300, 1300, 2400, 100, 0, 0, 1, '2021-09-15 03:42:31', '2021-09-28 03:42:31', 'Đẹp, thởi thượng', 0);
 
 -- --------------------------------------------------------
@@ -303,9 +306,9 @@ CREATE TABLE IF NOT EXISTS `tai_khoan` (
 
 INSERT INTO `tai_khoan` (`id_nguoi_dung`, `email`, `ho_ten`, `ngay_sinh`, `dia_chi`, `mat_khau`, `id_quyen_han`, `OTP`, `diem_danhgia_duong`, `diem_danhgia_am`, `expired`) VALUES
 (1, 'nijigi1129@rebation.com', 'John Henry', '2019-07-03 10:00:00.000000', '123 hung vuong', '$2b$10$uBhaNvbi9tiUi2UOGAwBku4YUfZEtOE/2InHBuxFa46Vw.I9wLVoG', 2, NULL, 0, 0, '2021-09-08 03:15:51'),
-(3, 'xegela5358@posiklan.com', 'abcf', NULL, '123 hung vuong', '$2b$10$I.bs9K2p1HJiQFPnbL3SJe10XpdYTe5Ftf49X6TtfdDeCXrS8oJuy', 1, NULL, 0, 0, '2021-09-08 03:23:35'),
+(3, 'xegela5358@posiklan.com', 'abcf', NULL, '123 hung vuong', '$2b$10$I.bs9K2p1HJiQFPnbL3SJe10XpdYTe5Ftf49X6TtfdDeCXrS8oJuy', 1, NULL, 1, 0, '2021-09-08 03:23:35'),
 (5, 'gahowa2784@posiklan.com', 'adminstrator', NULL, '123 hung vuong', '$2b$10$213eVEt2x/XP9gVUaii0BuXLEDWES/4jmXUONdd56Fl69U0KAwmfG', 1, NULL, 1, 2, '2021-09-08 17:35:17'),
-(6, 'ttdat17ck1@gmail.com', 'hang', NULL, '123 hung vuong', '$2b$10$QGDfKZzUQhOyw/gH./Tp2.WN/18usVeJWT4GrPak1.zF0gCYfNY9O', 1, NULL, 0, 0, '2021-09-16 10:03:07');
+(6, 'ttdat17ck1@gmail.com', 'hang', NULL, '123 hung vuong', '$2b$10$QGDfKZzUQhOyw/gH./Tp2.WN/18usVeJWT4GrPak1.zF0gCYfNY9O', 1, NULL, 0, 1, '2021-09-16 10:03:07');
 
 -- --------------------------------------------------------
 
@@ -328,6 +331,28 @@ INSERT INTO `trang_thai` (`id`, `ten`) VALUES
 (1, 'Kích Hoạt'),
 (2, 'Khóa'),
 (3, 'Chờ');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trang_thai_dathang`
+--
+
+DROP TABLE IF EXISTS `trang_thai_dathang`;
+CREATE TABLE IF NOT EXISTS `trang_thai_dathang` (
+  `id_trang_thai` int(11) NOT NULL AUTO_INCREMENT,
+  `ten_trang_thai` varchar(200) NOT NULL,
+  PRIMARY KEY (`id_trang_thai`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `trang_thai_dathang`
+--
+
+INSERT INTO `trang_thai_dathang` (`id_trang_thai`, `ten_trang_thai`) VALUES
+(1, 'Chờ Xử Lí'),
+(2, 'Giao Thành Công'),
+(3, 'Hủy Bỏ');
 
 -- --------------------------------------------------------
 

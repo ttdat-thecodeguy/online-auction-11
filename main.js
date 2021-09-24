@@ -34,7 +34,7 @@ app.use('/api/dau-gia' ,require('./routes/Bidder/DauGia'))
 //// user - seller 
 
 app.use('/api/nguoi-ban',[Authentiaction.requireUser, Authentiaction.requireSeller],require('./routes/Seller/SanPham'))
-app.use('/api/tai-khoan/don-hang', [Authentiaction.requireUser, Authentiaction.requireSeller], require('./routes/Seller/DonHang'))
+app.use('/api/nguoi-ban/don-hang', [Authentiaction.requireUser, Authentiaction.requireSeller], require('./routes/Seller/DonHang'))
 app.use('/api/dau-gia', [Authentiaction.requireUser, Authentiaction.requireSeller], require('./routes/Seller/DauGia'))
 
 //// admin // Khương Nguyễn

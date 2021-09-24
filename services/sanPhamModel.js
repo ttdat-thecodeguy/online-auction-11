@@ -101,6 +101,11 @@ module.exports = {
       gia_hien_tai
     })
   },
+  updateMoTa(id, mo_ta){
+    return db(table).where("id_sp", id).update({
+      mo_ta
+    })
+  },
   updateLuotDauGia(id, luot_daugia){
     return db(table).where("id_sp", id).update({
       luot_daugia

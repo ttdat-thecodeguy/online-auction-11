@@ -177,9 +177,7 @@ router.get("/5-san-pham-cung-danh-muc", async (req, res)=>{
     return res.json(arr_product)
 })
 
-
 ///////////// TRANG CHỦ
-
 
 router.get("/5-san-pham-gan-ket-thuc", async (req, res)=>{
     let product = await sanPhamModel.filterSanPham("end_date","asc",5)

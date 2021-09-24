@@ -67,7 +67,7 @@ router.post("/nang-diem-danh-gia", async (req, res) => {
     });
   }
   const user = await taiKhoanModel.findById(id_target);
-  if (user == null || user.OTP != null) {
+  if (user == null) {
     return res.status(401).json({
       messeage: "user not found or invalid",
     });
