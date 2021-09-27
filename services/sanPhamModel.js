@@ -23,6 +23,9 @@ function mapProduct() {
       );
 }
 module.exports = {
+  findAllWithPaging(offset, limit){
+    return db('san_pham').limit(limit).offset(offset);
+  },
   findAll() {
     return db(table);
   },

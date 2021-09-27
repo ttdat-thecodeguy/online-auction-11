@@ -1,0 +1,71 @@
+{
+    "them_nguoi_dung": {
+        "type": "object",
+        "properties": {
+            "email":{
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$"
+            },
+            "ho_ten":{
+                "type": "string"
+            },
+            "ngay_sinh":{
+                "type": "string"
+            },
+            "dia_chi":{
+                "type": "string"
+            }
+        },
+        "required": [
+            "email",
+            "ho_ten",
+            "ngay_sinh",
+            "dia_chi"
+        ],
+        "additionalProperties": false
+    },
+    "cap_nhat_nguoi_dung": {
+        "type": "object",
+        "properties": {
+            "id_nguoi_dung":{
+                "type": "integer"
+            },
+            "email":{
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$"
+            },
+            "ho_ten":{
+                "type": "string",
+                "minLength": 1
+            },
+            "ngay_sinh":{
+                "type": "string",
+                "minLength": 1
+            },
+            "dia_chi":{
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "required": [
+            "id_nguoi_dung"
+        ],
+        "additionalProperties": false
+    },
+    "cap_nhat_cap_bac":{
+        "type": "object",
+        "properties": {
+            "id_nguoi_dung":{
+                "type": "integer"
+            },
+            "id_quyen_han":{
+                "type": "integer"
+            }
+        },
+        "required": [
+            "id_nguoi_dung",
+            "id_quyen_han"
+        ],
+        "additionalProperties": false
+    }
+}
