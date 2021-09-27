@@ -12,6 +12,11 @@ module.exports = {
   findAll() {
     return db(table);
   },
+  findAccountWaitingUpgrade(){
+    return db("nang_cap_tk")
+      .join('tai_khoan','nang_cap_tk.id_nguoi_dung','tai_khoan.id_nguoi_dung')
+      .join('quyen_han', 'nang_cap_tk.id_quyen_han_mong_muon','quyen_han.id_quyen_han' );
+  },
   async findById(id) {
     const rows = await db('tai_khoan').where('id_nguoi_dung', id);
     if (rows.length === 0) {
@@ -35,6 +40,21 @@ module.exports = {
   },
   add(taikhoan) {
     return db(table).insert(taikhoan);
+  },
+  findNangCapTK(id_nguoi_dung){
+    return db("nang_cap_tk").where({
+      id_nguoi_dung
+    }).first()
+  },
+  updateYeuCau(id_nguoi_dung, id_quyen_han_mong_muon){
+    return db("nang_cap_tk").where({
+      id_nguoi_dung
+    }).update({
+      id_quyen_han_mong_muon
+    })
+  },
+  addNangCapTK(nang_cap){
+    return db("nang_cap_tk").insert(nang_cap)
   },
   del(id) {
     return db(table)

@@ -31,7 +31,7 @@ router.post("/dang-ki", async function (req, res) {
       };
 
       await taiKhoanModel.add(register);
-      mailer.send({
+      await mailer.send({
         from: "online.auction.11team@gmail.com",
         to: `${register.email}`,
         subject: "OnlineAuction11: Xác thực tài khoản của bạn.",

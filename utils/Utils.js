@@ -1,3 +1,31 @@
+var moment = require('moment'); // require
+
+require('moment/locale/vi')
+
+// moment.updateLocale('en', {
+//     relativeTime : {
+//         future: "in %s",
+//         past:   "%s ago",
+//         s: function (number, withoutSuffix, key, isFuture){
+//             return '00:' + (number<10 ? '0':'') + number + ' minutes';
+//         },
+//         m:  "01:00 minutes",
+//         mm: function (number, withoutSuffix, key, isFuture){
+//             return (number<10 ? '0':'') + number + ':00' + ' minutes';
+//         },
+//         h:  "an hour",
+//         hh: "%d hours",
+//         d:  "a day",
+//         dd: "%d days",
+//         M:  "a month",
+//         MM: "%d months",
+//         y:  "a year",
+//         yy: "%d years"
+//     }
+// });
+
+moment.locale('vi')
+
 module.exports = {
     doiTiengViet : (str) => {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -6,9 +34,7 @@ module.exports = {
         str = str.toLowerCase()
         let arr = str.split(" ");
         let path = id + "-";
-        for(let i = 0;i < arr.length - 1;i++){
-            path += removeTV(arr[i]) + "-";
-        }
+        for(let i = 0;i < arr.length - 1;i++) path += removeTV(arr[i]) + "-";
         return (path + removeTV(arr[arr.length - 1])    )
     },
     mapProduct : (product, id, anh) => {
@@ -22,12 +48,45 @@ module.exports = {
         product.anh_phu = anh
         delete product.id_danh_muc
         delete product.ten_danh_muc
-    
-        product.path = Utils.toPath(product.ten_sp, id);
+        
+        var e =  moment(product.end_date);
+        var p = moment(product.publish_date);
+
+        var today = moment().startOf('day');
+
+        var sec_end_date = Math.round(moment.duration(e - today).asSeconds());
+        var sec_publish_date = Math.round(moment.duration(today - p).asSeconds());
+        
+        product.isMoi = false
+        product.relative_publish_date = null
+        product.relative_end_date = null
+        
+        if(sec_publish_date < 3600){
+            product.isMoi = true
+            product.relative_publish_date = p.fromNow()
+        }
+
+        if(sec_end_date < 259200){
+            product.relative_end_date = e.fromNow()
+        }
+
+        product.path = module.exports.toPath(product.ten_sp, id);
         return product
+    },
+    masking: (str)=>{
+        let idx = Math.round(str.length / 2) 
+        return replaceBetween(0, idx, "*", str)
     }
 
 }
+
+
+
+function replaceBetween(start, end, chr, str) {
+    let masking = ''
+    for(let i = start; i < end;i++) masking += chr
+    return masking + str.substring(end);
+};
 
 function removeTV(str){
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 

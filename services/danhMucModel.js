@@ -1,6 +1,6 @@
 const db = require("../utils/db");
 
-table = "danh_muc";
+const table = "danh_muc";
 module.exports = {
     countCategory(){
         return db(table).count('* as count')
