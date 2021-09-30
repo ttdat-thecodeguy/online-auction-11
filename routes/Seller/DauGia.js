@@ -4,7 +4,60 @@ const dauGiaModel = require("../../services/dauGiaModel");
 const sanPhamModel = require("../../services/sanPhamModel");
 const taiKhoanModel = require("../../services/taiKhoanModel");
 const danhGiaModel = require("../../services/danhGiaModel")
+const camDauGiaModel = require("../../services/camDauGiaModel")
 const router = express.Router();
+
+/// từ chối lượt ra giá của người cao nhất và chuyển cho người thứ 2
+
+router.get("/tu-choi-ra-gia" ,async (req, res)=>{
+  const id_nguoi_ban = req.accessTokenPayload.id || 0;
+  const id_sanpham = req.query.san_pham;
+  
+  let san_pham = await sanPhamModel.findById(id_sanpham);
+  if(san_pham.length == 0){
+    return res.json({
+      messeage: "product not found"
+    })
+  }
+  ///// kiểm tra user seller này có sở hữu sản phẩm này không
+
+  if(id_nguoi_ban != san_pham[0].id_nguoi_ban){
+    return res.json({
+      messeage: "unauthorized"
+    }).status(401)
+  }
+
+  let count = await dauGiaModel.countDauGiaBySanPham(id_sanpham);
+  if(count == 0 || count == null){
+    return res.json({
+      messeage: "auction is empty"
+    }).status(500)
+  }
+
+
+  let caoNhat = await dauGiaModel.findDauGiaCaoNhat(id_sanpham)
+  if(caoNhat == null){
+    return res.json({
+      messeage: "something went wrong"
+    })
+  }
+  let aff_rows = await dauGiaModel.khoaDauGiaCaoNhat(id_sanpham, caoNhat.id_nguoi_dau_gia)
+  if(aff_rows == 0){
+    return res.json({
+      messeage: "something went wrong"
+    })
+  }
+  //// cấm người dùng đấu giá sp này
+
+  await camDauGiaModel.add({
+    id_sp: id_sanpham,
+    id_nguoi_dung: caoNhat.id_nguoi_dau_gia
+  })
+  
+  return res.json({
+    messeage: "remove top auction"
+  })
+})
 
 //// danh sách chờ cho các chiếu mới
 
@@ -122,6 +175,16 @@ router.get("/huy-bo", async (req, res) => {
           messeage: "User Not Authorized",
       });
     }
+
+    //// cấm người dùng đấu giá sp này
+
+    await camDauGiaModel.add({
+      id_sp: yeu_cau.id_sp,
+      id_nguoi_dung: yeu_cau.id_nguoi_dau_gia
+    })
+
+    //// khoá dòng đấu giá
+
     await dauGiaModel.updateStatusById(id_yc, 2);
 
     //// xử lí nhận xét khi hủy bỏ
@@ -144,7 +207,6 @@ router.get("/huy-bo", async (req, res) => {
     return res.status(200).json({
         messeage: "unaccepted is done",
     });
-
 });
 
 module.exports = router;

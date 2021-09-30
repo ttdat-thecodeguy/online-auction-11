@@ -53,16 +53,8 @@ module.exports = {
             status
         })
     },
-    async khoaDauGiaCaoNhat(id_sp){
-        let max = await db(table).where({"id_sp": id_sp, status: 1}).max('gia_tra_cao_nhat as gia_cao_nhat').first()
-
+    khoaDauGiaCaoNhat(id_sp, id_nguoi_ra_gia){
         return db(table)  
-        .where({"id_sp":id_sp,
-                "gia_tra_cao_nhat":max.gia_cao_nhat,
-                 "status":1}).andWhere(
-                                       "ngay_ket_thuc", "<", new Date(Date.now())
-                                   ).update({
-                                       status: 2
-                                   })
+        .where({"id_sp":id_sp,"id_nguoi_dau_gia":id_nguoi_ra_gia,"status": 1}).update({status: 2})
     }
 };
