@@ -121,7 +121,7 @@ router.get("/chap-thuan", async (req, res) => {
       to: `${nguoi_dau_gia.email}`,
       subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
       html: `
-            Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten}.      
+            Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten_sp}.      
             <ul> 
                 <li>giá mua: ${gia_dat}</li>
             <ul>
@@ -166,7 +166,7 @@ router.get("/chap-thuan", async (req, res) => {
           to: `${sp.email}`,
           subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
           html: `
-                Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn bị canh tranh gay gắt ${sp.ten}.      
+                Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn bị canh tranh gay gắt ${sp.ten_sp}.      
                 <ul> 
                     <li>giá mua: ${cao_nhat.gia_tra_cao_nhat}</li>
                 <ul>
@@ -179,7 +179,7 @@ router.get("/chap-thuan", async (req, res) => {
           to: `${nguoi_dau_gia.email}`,
           subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
           html: `
-                Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten}.      
+                Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten_sp}.      
                 <ul> 
                     <li>giá mua: ${cao_nhat.gia_tra_cao_nhat}</li>
                 <ul>
@@ -192,7 +192,7 @@ router.get("/chap-thuan", async (req, res) => {
           to: `${cao_nhat.email}`,
           subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
           html: `
-                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại ${sp.ten}  Đã Bị đặt giá trên.      
+                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại ${sp.ten_sp}  Đã Bị đặt giá trên.      
                 (Đây là thư tự động vui lòng không phản hồi)
                 `,
         })

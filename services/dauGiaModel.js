@@ -35,9 +35,7 @@ module.exports = {
         return db(table)  
         .where({"id_sp":id_sp,
                 "gia_tra_cao_nhat":max.gia_cao_nhat,
-                 "status":1}).andWhere(
-                                       "ngay_ket_thuc", "<", new Date(Date.now())
-                                   ).first()
+                 "status":1}).first()
     },
     add(dau_gia){
         return db(table).insert(dau_gia)

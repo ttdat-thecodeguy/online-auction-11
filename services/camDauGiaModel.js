@@ -12,4 +12,7 @@ module.exports = {
   add(camDauGia) {
     return db(table).insert(camDauGia);
   },
+  deleteBySanPham(id_sp){
+    return db(table).where("id_sp", id_sp).del()
+  }
 };

@@ -93,7 +93,6 @@ module.exports = {
     return db(table)
     .where("id_nguoi_dung", id)
       .update({
-        email: account.email,
         ho_ten: account.ho_ten,
         ngay_sinh: account.ngay_sinh
       });

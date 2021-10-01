@@ -114,7 +114,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
      await mailer.send({
       from: "online.auction.11team@gmail.com",
       to: `${sp.email}`,
-      subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+      subject: "OnlineAuction11: Chúc Mừng Bạn.",
       html: `
             Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn hiện đã có người đấu giá với giá mua ${gia_dat} là .
             (Đây là thư tự động vui lòng không phản hồi)
@@ -126,7 +126,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
       to: `${nguoi_dau_gia.email}`,
       subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
       html: `
-            Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten}.      
+            Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten_sp}.      
             <ul> 
                 <li>giá mua: ${gia_dat}</li>
             <ul>
@@ -178,9 +178,9 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
         await mailer.send({
           from: "online.auction.11team@gmail.com",
           to: `${sp.email}`,
-          subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+          subject: "OnlineAuction11: Chúc Mừng Bán.",
           html: `
-                Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn bị canh tranh gay gắt ${sp.ten}.      
+                Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn bị canh tranh gay gắt ${sp.ten_sp}.      
                 <ul> 
                     <li>giá mua: ${cao_nhat.gia_tra_cao_nhat}</li>
                 <ul>
@@ -193,7 +193,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
           to: `${nguoi_dau_gia.email}`,
           subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
           html: `
-                Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten}.      
+                Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten_sp}.      
                 <ul> 
                     <li>giá mua: ${cao_nhat.gia_tra_cao_nhat}</li>
                 <ul>
@@ -206,7 +206,7 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
           to: `${cao_nhat.email}`,
           subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
           html: `
-                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại ${sp.ten}  Đã Bị đặt giá trên.      
+                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại ${sp.ten_sp}  Đã Bị đặt giá trên.      
                 (Đây là thư tự động vui lòng không phản hồi)
                 `,
         })

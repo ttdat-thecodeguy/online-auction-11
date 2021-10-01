@@ -7,6 +7,7 @@ const donHangModel = require("./services/datHangModel");
 
 
 const taiKhoanModel = require("./services/taiKhoanModel");
+const camDauGiaModel = require("./services/camDauGiaModel");
 
 
 const every_day_at_6h = "0 6 * * *";
@@ -29,6 +30,9 @@ var job = new CronJob(
         let cao_nhat = await dauGiaModel.findDauGiaCaoNhatKhiKetThuc(
           products[i].id_sp
         );
+        
+        console.log(cao_nhat)
+
         if (cao_nhat != null) {
           const don_hang = {
             id_sp: cao_nhat.id_sp,
@@ -58,7 +62,6 @@ var job = new CronJob(
                   `,
           });
 
-
           await mailer.send({
             from: "online.auction.11team@gmail.com",
             to: `${email_nguoi_ban}`,
@@ -74,8 +77,6 @@ var job = new CronJob(
           await donHangModel.themDonHang(don_hang);
           /// khóa toàn bộ cuộc đấu giá trước lại
           await dauGiaModel.updateStatus(products[i].id_sp, 2)
-          /// khóa toàn bộ sản phẩm lại
-          await sanPhamModel.updateStatus(products[i].id_sp, 1);
         } else {
           /// mailer to nguoiban
           await mailer.send({
@@ -91,6 +92,13 @@ var job = new CronJob(
                   `,
           });
         }
+
+        /// khóa toàn bộ sản phẩm lại
+        await sanPhamModel.updateStatus(products[i].id_sp, 1);
+        
+        //// xóa toàn bộ dòng cấm đấu giá liên quan
+        await camDauGiaModel.deleteBySanPham(products[i].id_sp)
+
       }
     }
   },

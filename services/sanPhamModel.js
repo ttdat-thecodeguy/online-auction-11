@@ -16,6 +16,8 @@ function mapProduct() {
         "san_pham.buoc_gia",
         "tai_khoan.email",
         "tai_khoan.id_nguoi_dung as id_nguoi_ban",
+        "tai_khoan.diem_danhgia_duong as diem_duong",
+        "tai_khoan.diem_danhgia_am as diem_am",
         "tai_khoan.ho_ten",
         "san_pham.publish_date",
         "san_pham.end_date",
@@ -58,7 +60,6 @@ module.exports = {
   },
   findById(id) {
     return mapProduct()
-    .join("tai_khoan", "san_pham.id_nguoi_ban", "tai_khoan.id_nguoi_dung")
     .where({"id_sp": id})   
   },
   findByNameWithPaging(name, offset, per_page){
