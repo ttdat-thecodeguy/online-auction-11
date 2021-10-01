@@ -57,7 +57,9 @@ module.exports = {
     return db("anh_san_pham").where({"id_sp": id_sp})
   },
   findById(id) {
-    return mapProduct().where({"id_sp": id})   
+    return mapProduct()
+    .join("tai_khoan", "san_pham.id_nguoi_ban", "tai_khoan.id_nguoi_dung")
+    .where({"id_sp": id})   
   },
   findByNameWithPaging(name, offset, per_page){
     return mapProduct().where("san_pham.ten", "LIKE" ,"%" + name + "%").andWhere("isLocked", 0).offset(offset).limit(per_page);

@@ -7,9 +7,9 @@ const taiKhoanModel = require("../../services/taiKhoanModel")
 const sanPhamModel = require("../../services/sanPhamModel");
 const dauGiaModel = require("../../services/dauGiaModel");
 const camDauGiaModel = require("../../services/camDauGiaModel")
-
-
 const Utils = require("../../utils/Utils");
+const mailer = require("../../utils/mailer");
+
 
 router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemDanhGia] ,async function (req, res) {
   /*  
@@ -53,6 +53,8 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
       isWin: false
     })
   }
+
+
   ////// Tính Toán Lượt đấu giá
   let luot_dau_gia = await dauGiaModel.countDauGiaBySanPham(id_sp);
   luot_dau_gia = luot_dau_gia.count
@@ -107,6 +109,30 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
     await dauGiaModel.add(dau_gia_rs);
 
     await sanPhamModel.updateGiaHT(id_sp, gia_dat)
+     /////send mail
+     // #1 - Bán
+     await mailer.send({
+      from: "online.auction.11team@gmail.com",
+      to: `${sp.email}`,
+      subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+      html: `
+            Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn hiện đã có người đấu giá với giá mua ${gia_dat} là .
+            (Đây là thư tự động vui lòng không phản hồi)
+            `,
+    })
+    // #1 - ra giá
+    await mailer.send({
+      from: "online.auction.11team@gmail.com",
+      to: `${nguoi_dau_gia.email}`,
+      subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+      html: `
+            Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten}.      
+            <ul> 
+                <li>giá mua: ${gia_dat}</li>
+            <ul>
+            (Đây là thư tự động vui lòng không phản hồi)
+            `,
+    })
 
     return res.json({ messeage: "win", isWin: true, gia_hien_tai: gia_dat}).status(200).end();
   } 
@@ -147,6 +173,43 @@ router.post("/tham-gia",[Authentication.requireUser, Authentication.requireDiemD
 
         //// cap nhat gia
         await sanPhamModel.updateGiaHT(id_sp, cao_nhat.gia_tra_cao_nhat)
+
+        // #2 - Bán
+        await mailer.send({
+          from: "online.auction.11team@gmail.com",
+          to: `${sp.email}`,
+          subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+          html: `
+                Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn bị canh tranh gay gắt ${sp.ten}.      
+                <ul> 
+                    <li>giá mua: ${cao_nhat.gia_tra_cao_nhat}</li>
+                <ul>
+                (Đây là thư tự động vui lòng không phản hồi)
+                `,
+        })
+        // #2 - ra giá
+        await mailer.send({
+          from: "online.auction.11team@gmail.com",
+          to: `${nguoi_dau_gia.email}`,
+          subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+          html: `
+                Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten}.      
+                <ul> 
+                    <li>giá mua: ${cao_nhat.gia_tra_cao_nhat}</li>
+                <ul>
+                (Đây là thư tự động vui lòng không phản hồi)
+                `,
+        })
+          // #2 - giữ giá
+        await mailer.send({
+          from: "online.auction.11team@gmail.com",
+          to: `${cao_nhat.email}`,
+          subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+          html: `
+                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại ${sp.ten}  Đã Bị đặt giá trên.      
+                (Đây là thư tự động vui lòng không phản hồi)
+                `,
+        })
 
         // thông báo thắng cuộc
         return res.json({ messeage: "win", isWin: true, gia_hien_tai: cao_nhat.gia_tra_cao_nhat}).status(200).end();

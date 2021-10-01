@@ -97,19 +97,42 @@ router.get("/chap-thuan", async (req, res) => {
   if (sp.length != 0) {
     sp = sp[0];
   }
+
+  let nguoi_dau_gia = await taiKhoanModel.findById(yeu_cau.id_nguoi_dau_gia);
+
   if (luot_dau_gia == 0) {
     await sanPhamModel.updateGiaHT(id_sp, gia_dat);
 
     await dauGiaModel.updateStatusById(id_yc, 1);
     
+     // #1 - Bán
+     await mailer.send({
+      from: "online.auction.11team@gmail.com",
+      to: `${sp.email}`,
+      subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+      html: `
+            Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn hiện đã có người đấu giá với giá mua ${gia_dat} là .
+            (Đây là thư tự động vui lòng không phản hồi)
+            `,
+    })
+    // #1 - ra giá
+    await mailer.send({
+      from: "online.auction.11team@gmail.com",
+      to: `${nguoi_dau_gia.email}`,
+      subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+      html: `
+            Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten}.      
+            <ul> 
+                <li>giá mua: ${gia_dat}</li>
+            <ul>
+            (Đây là thư tự động vui lòng không phản hồi)
+            `,
+    })
   } else {
     let cao_nhat = await dauGiaModel.findDauGiaCaoNhat(id_sp);
 
     /// không chấp thuận
     if ((cao_nhat.gia_tra_cao_nhat + sp.buoc_gia) > yeu_cau.gia_tra_cao_nhat) {
-
-      console.log(yeu_cau)
-
       yeu_cau.gia_khoi_diem = yeu_cau.gia_tra_cao_nhat;
       yeu_cau.id_tra_cao_nhat = cao_nhat.id_tra_cao_nhat;
       //// khi giá khởi điểm của top ở dưới mức đặt giá
@@ -136,6 +159,43 @@ router.get("/chap-thuan", async (req, res) => {
         await dauGiaModel.updateDauGia(id_yc,yeu_cau)
         //// 
         await sanPhamModel.updateGiaHT(id_sp, cao_nhat.gia_tra_cao_nhat)
+
+        // #2 - Bán
+        await mailer.send({
+          from: "online.auction.11team@gmail.com",
+          to: `${sp.email}`,
+          subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+          html: `
+                Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn bị canh tranh gay gắt ${sp.ten}.      
+                <ul> 
+                    <li>giá mua: ${cao_nhat.gia_tra_cao_nhat}</li>
+                <ul>
+                (Đây là thư tự động vui lòng không phản hồi)
+                `,
+        })
+        // #2 - ra giá
+        await mailer.send({
+          from: "online.auction.11team@gmail.com",
+          to: `${nguoi_dau_gia.email}`,
+          subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+          html: `
+                Xin chào ${nguoi_dau_gia.ho_ten}, Chúc Mừng bạn, hiện bạn đang dẫn đầu ${sp.ten}.      
+                <ul> 
+                    <li>giá mua: ${cao_nhat.gia_tra_cao_nhat}</li>
+                <ul>
+                (Đây là thư tự động vui lòng không phản hồi)
+                `,
+        })
+          // #2 - giữ giá
+        await mailer.send({
+          from: "online.auction.11team@gmail.com",
+          to: `${cao_nhat.email}`,
+          subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
+          html: `
+                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại ${sp.ten}  Đã Bị đặt giá trên.      
+                (Đây là thư tự động vui lòng không phản hồi)
+                `,
+        })
     }
 
     /// xử lí nhận xét khi chấp thuận

@@ -24,7 +24,9 @@ module.exports = {
     },
     async findDauGiaCaoNhat(id_sp){
         let max = await db(table).where({"id_sp":id_sp, status: 1}).max('gia_tra_cao_nhat as gia_cao_nhat').first()
-        return db(table).where({"id_sp":id_sp,status: 1,
+        return db(table)
+                .join("tai_khoan", "dau_gia.id_nguoi_dau_gia", "tai_khoan.id_nguoi_dung")
+                .where({"id_sp":id_sp,status: 1,
                                    "gia_tra_cao_nhat":max.gia_cao_nhat}).first()
     },
     async findDauGiaCaoNhatKhiKetThuc(id_sp){
