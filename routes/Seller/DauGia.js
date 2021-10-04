@@ -7,6 +7,7 @@ const danhGiaModel = require("../../services/danhGiaModel")
 const camDauGiaModel = require("../../services/camDauGiaModel")
 const router = express.Router();
 
+const mailer = require('../../utils/mailer')
 /// từ chối lượt ra giá của người cao nhất và chuyển cho người thứ 2
 
 router.get("/tu-choi-ra-gia" ,async (req, res)=>{
@@ -101,7 +102,7 @@ router.get("/chap-thuan", async (req, res) => {
   let nguoi_dau_gia = await taiKhoanModel.findById(yeu_cau.id_nguoi_dau_gia);
 
   if (luot_dau_gia == 0) {
-    await sanPhamModel.updateGiaHT(id_sp, gia_dat);
+    await sanPhamModel.updateGiaHT(id_sp, yeu_cau.gia_khoi_diem);
 
     await dauGiaModel.updateStatusById(id_yc, 1);
     
@@ -111,7 +112,7 @@ router.get("/chap-thuan", async (req, res) => {
       to: `${sp.email}`,
       subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
       html: `
-            Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn hiện đã có người đấu giá với giá mua ${gia_dat} là .
+            Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn hiện đã có người đấu giá với giá mua ${ yeu_cau.gia_khoi_diem} là .
             (Đây là thư tự động vui lòng không phản hồi)
             `,
     })
@@ -128,6 +129,7 @@ router.get("/chap-thuan", async (req, res) => {
             (Đây là thư tự động vui lòng không phản hồi)
             `,
     })
+
   } else {
     let cao_nhat = await dauGiaModel.findDauGiaCaoNhat(id_sp);
 
@@ -197,27 +199,26 @@ router.get("/chap-thuan", async (req, res) => {
                 `,
         })
     }
-
-    /// xử lí nhận xét khi chấp thuận
-
-    let user = await taiKhoanModel.findById(yeu_cau.id_nguoi_dau_gia)
-    let diem = user.diem_danhgia_duong + 1;
-    // nang diem danh gia trong bang tk
-    await taiKhoanModel.updateNangDiemDanhGia(yeu_cau.id_nguoi_dau_gia, diem);
-  
-    // them danh gia
-    const danhGia = {
-      nguoi_danh_gia: id,
-      nguoi_bi_danh_gia: yeu_cau.id_nguoi_dau_gia,
-      nhan_xet: "cảm ơn bạn đã tham gia đấu giá",
-      isDuong: true
-    }
-    await danhGiaModel.add(danhGia)
-
-    return res.json({
-        messeage: "accepted is done",
-    });
   }
+  /// xử lí nhận xét khi chấp thuận
+
+  let user = await taiKhoanModel.findById(yeu_cau.id_nguoi_dau_gia)
+  let diem = user.diem_danhgia_duong + 1;
+  // nang diem danh gia trong bang tk
+  await taiKhoanModel.updateNangDiemDanhGia(yeu_cau.id_nguoi_dau_gia, diem);
+
+  // them danh gia
+  const danhGia = {
+    nguoi_danh_gia: id,
+    nguoi_bi_danh_gia: yeu_cau.id_nguoi_dau_gia,
+    nhan_xet: "cảm ơn bạn đã tham gia đấu giá",
+    isDuong: true
+  }
+  await danhGiaModel.add(danhGia)
+
+  return res.json({
+      messeage: "accepted is done",
+  });
 });
 
 router.get("/huy-bo", async (req, res) => {
