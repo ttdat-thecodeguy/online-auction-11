@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const sanPhamModel = require('../services/sanPhamModel')
 
+const sanPhamModel = require('../services/sanPhamModel')
+const danhMucModel = require('../services/danhMucModel')
 const Utils = require("../utils/Utils")
 
 router.get('/danh-sach-san-pham', async function (req, res) {
@@ -63,5 +64,16 @@ router.get('/danh-sach-san-pham', async function (req, res) {
         last_page
     })
 });
+
+router.get('/danh-sach-cap-danh-muc', async (req, res)=>{
+    const rows = await danhMucModel.findAllCapDanhMuc();
+    return res.status(200).json(rows);
+})
+
+router.get('/danh-sach-danh-muc', async (req, res)=>{
+    const rows = await danhMucModel.findAllDanhMuc();
+    return res.status(200).json(rows);
+})
+
 
 module.exports = router;

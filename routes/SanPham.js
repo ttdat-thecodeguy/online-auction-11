@@ -32,10 +32,10 @@ router.get('/tim-kiem', async (req, res)=>{
 
         /// order by name
         if(time != null && price == null){
-            product = await sanPhamModel.filterByNameWithPaging(name, offset, per_page, "end_date", "desc")
+            product = await sanPhamModel.filterAndSearchByNameWithPaging(name, offset, per_page, "end_date", "desc")
         }
         else if(time == null && price != null){
-            product = await sanPhamModel.filterByNameWithPaging(name, offset, per_page,"gia_hien_tai", "asc")
+            product = await sanPhamModel.filterAndSearchByNameWithPaging(name, offset, per_page,"gia_hien_tai", "asc")
         }
      
         t = await sanPhamModel.countByName(name)
@@ -47,10 +47,10 @@ router.get('/tim-kiem', async (req, res)=>{
 
             /// order by cate id
             if(time != null && price == null){
-                product = await sanPhamModel.filterByCateNameWithPaging(cate, offset, per_page, "end_date", "desc")
+                product = await sanPhamModel.filterAndSearchByCateNameWithPaging(cate, offset, per_page, "end_date", "desc")
             }
             else if(time == null && price != null){
-                product = await sanPhamModel.filterByCateNameWithPaging(cate, offset, per_page, "gia_hien_tai", "asc")
+                product = await sanPhamModel.filterAndSearchByCateNameWithPaging(cate, offset, per_page, "gia_hien_tai", "asc")
             }
         
 
@@ -60,10 +60,10 @@ router.get('/tim-kiem', async (req, res)=>{
 
             /// order by cate id
             if(time != null && price == null){
-                product = await sanPhamModel.filterByCateIdWithPaging(parseInt(cate), offset, per_page,"end_date", "desc")
+                product = await sanPhamModel.filterAndSearchByCateIdWithPaging(parseInt(cate), offset, per_page,"end_date", "desc")
             }
             else if(time == null && price != null){
-                product = await sanPhamModel.filterByCateIdWithPaging(parseInt(cate), offset, per_page,"gia_hien_tai", "asc")
+                product = await sanPhamModel.filterAndSearchByCateIdWithPaging(parseInt(cate), offset, per_page,"gia_hien_tai", "asc")
             }
         
             t = await sanPhamModel.countByCateId(parseInt(cate))
