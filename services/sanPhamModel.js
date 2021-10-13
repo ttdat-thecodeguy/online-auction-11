@@ -29,7 +29,13 @@ function mapProduct() {
       );
 }
 module.exports = {
-  findAll(offset, per_page) {
+  findAllWithPaging(offset, limit){
+    return db('san_pham').limit(limit).offset(offset);
+  },
+  findAll(){
+    return db(table);
+  },
+  findAll(offset, per_page){
     return mapProduct().where("isLocked", 0).limit(per_page).offset(offset)
   },
   findAllKetThuc(){

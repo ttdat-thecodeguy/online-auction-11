@@ -3,6 +3,12 @@ const db = require('../utils/db');
 const table = "tai_khoan"
 
 module.exports = {
+  countUser(){
+    return db(table).count('* as count');
+  },
+  findAllWithPaging(offset, limit){
+    return db(table).offset(offset).limit(limit);
+  },
   findAll() {
     return db(table);
   },
@@ -76,6 +82,13 @@ module.exports = {
       .update({
         mat_khau
       });
+  },
+  updateCapBac(id, id_quyen_han){
+    return db(table)
+      .where("id_nguoi_dung", id)
+      .update({
+        id_quyen_han
+    });
   },
   updateOTP (id, OTP) {
     return db(table)
