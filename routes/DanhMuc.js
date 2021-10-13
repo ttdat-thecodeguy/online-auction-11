@@ -81,4 +81,9 @@ router.get('/danh-sach-danh-muc-theo-cap', async (req, res)=>{
     return res.status(200).json(rows);
 })
 
+router.get('/tim-danh-muc', async(req, res)=>{
+    const danh_muc = req.query.danh_muc;
+    const danh_muc = await danhMucModel.findById(danh_muc);
+    return res.status(200).json(danh_muc);
+})  
 module.exports = router;
