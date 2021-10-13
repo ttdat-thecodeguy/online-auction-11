@@ -75,5 +75,10 @@ router.get('/danh-sach-danh-muc', async (req, res)=>{
     return res.status(200).json(rows);
 })
 
+router.get('/danh-sach-danh-muc-theo-cap', async (req, res)=>{
+    const cap = req.query.cap;
+    const rows = await danhMucModel.findAllDanhMucTheoCap(cap);
+    return res.status(200).json(rows);
+})
 
 module.exports = router;
