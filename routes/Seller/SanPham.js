@@ -7,6 +7,7 @@ const upload = multer()
 
 const { cloudinary } = require('../../utils/cloudinary');
 const anhModel = require('../../services/anhModel')
+const { v4: uuidv4 } = require("uuid"); 
 
 const sanPhamModel = require('../../services/sanPhamModel')
 

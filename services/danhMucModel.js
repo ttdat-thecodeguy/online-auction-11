@@ -5,6 +5,12 @@ module.exports = {
     countCategory(){
         return db(table).count('* as count')
     },
+    findAllDanhMuc(){
+        return db(table);
+    },
+    findAllCapDanhMuc(){
+        return  db("cap_danh_muc");
+    },
     findAll(offset, per_page) {
         return db(table).offset(offset).limit(per_page);
     },
