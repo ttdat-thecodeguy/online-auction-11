@@ -9,40 +9,25 @@ router.get('/list-category/', async function (req, res) {
     const level = req.query.level;
     const nameCategory = req.query.name_cat;
 
-    let per_page = req.query.per_page || 10;
-    let page = req.query.current_page || 1;
-
-    if (page < 1) {
-        page = 1;
-    }
-
-    let offset = (page - 1) * per_page;
-    let listCategory = [];
-
     if (id) {
-        listCategory = await categoryModel.findById(id, offset, per_page);
+        listCategory = await categoryModel.findById(id);
     }
     if (level) {
-        listCategory = await categoryModel.findByLevel(id, offset, per_page);
+        listCategory = await categoryModel.findByLevel(id);
     }
     if (nameCategory) {
-        listCategory = await categoryModel.findByName(nameCategory, offset, per_page);
+        listCategory = await categoryModel.findByName(nameCategory);
     }
     if(!id && !level && !nameCategory){
-        listCategory = await categoryModel.findAll(offset, per_page);
+        listCategory = await categoryModel.findAllDanhMuc();
     }
 
     let total = await categoryModel.countCategory();
-    let to = offset + listCategory.length;
-    let last_page = Math.ceil(total / per_page);
-    if (listCategory.length == 0) {
+    if (listCategory.length === 0) {
         return res.json([]).status(201)
     }
     
     return res.json({
-        page,
-        to,
-        last_page,
         listCategory
     }).status('200');
 });

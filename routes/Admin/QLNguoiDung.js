@@ -20,7 +20,7 @@ router.get('/detail-user', async function (req, res) {
   }).status(200);
 });
 
-router.get('/nguoi-dung-cho-nang-cap', async function (req, res) {
+router.get('/list-user-upgrade', async function (req, res) {
   let rows = await taiKhoanModel.findAccountWaitingUpgrade()
   rows = rows.map(r => {
       return {
@@ -34,27 +34,14 @@ router.get('/nguoi-dung-cho-nang-cap', async function (req, res) {
 });
 
 router.get('/list-user/', async function (req, res){
-  let per_page = req.query.per_page || 10;
-  let page = req.query.current_page || 1;
-
-  if (page < 1) {
-      page = 1;
-  }
-  let offset = (page - 1) * per_page;
-
-  const listUser = await taiKhoanModel.findAllWithPaging(offset, per_page);
+  const listUser = await taiKhoanModel.findAll();
   let total = await taiKhoanModel.countUser();
-  let to = offset + listUser.length;
-  let last_page = Math.ceil(total / per_page);
 
   if (listUser.length == 0) {
       return res.json([]).status(201)
   }
 
   return res.json({
-      page,
-      to,
-      last_page,
       listUser
   }).status('200');
 });

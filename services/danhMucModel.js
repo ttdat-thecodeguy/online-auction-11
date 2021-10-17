@@ -11,11 +11,11 @@ module.exports = {
     findById(id) {
         return db.select().from(table).where('id_danh_muc', id);     
     },
-    findByLevel(id, offset, per_page) {
-        return db.select().from(table).where('cap_danh_muc', id).offset(offset).limit(per_page);     
+    findByLevel(id) {
+        return db.select().from(table).where('cap_danh_muc', id);     
     },
-    findByName(name, offset, per_page) {
-        return db.select().from(table).where("ten", "LIKE" ,"%" + name + "%").offset(offset).limit(per_page);     
+    findByName(name) {
+        return db.select().from(table).where("ten", "LIKE" ,"%" + name + "%");     
     },
     findProductByCat(id){
         return db.select().from("san_pham").where("id_danh_muc", id);     
