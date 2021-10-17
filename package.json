@@ -8,7 +8,7 @@
     "start": "node main.js",
     "cron": "node main-cron.js",
     "dev": "nodemon main.js",
-    "rl-test": "nodemon main-realtime.js"
+    "rl-test":"nodemon main-realtime.js"
   },
   "author": "",
   "license": "ISC",

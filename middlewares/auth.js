@@ -48,8 +48,6 @@ module.exports = {
     const acc = await taiKhoanModel.findById(req.accessTokenPayload.id)
     let percent = ((acc.diem_danhgia_duong) / (acc.diem_danhgia_am + acc.diem_danhgia_duong)) * 100;
     
-    
-
     if(percent >= 80 || (acc.diem_danhgia_duong == 0 && acc.diem_danhgia_am == 0)){
       next()
     } else{

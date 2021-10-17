@@ -16,6 +16,8 @@ function mapProduct() {
         "san_pham.buoc_gia",
         "tai_khoan.email",
         "tai_khoan.id_nguoi_dung as id_nguoi_ban",
+        "tai_khoan.diem_danhgia_duong as diem_duong",
+        "tai_khoan.diem_danhgia_am as diem_am",
         "tai_khoan.ho_ten",
         "san_pham.publish_date",
         "san_pham.end_date",
@@ -63,7 +65,8 @@ module.exports = {
     return db("anh_san_pham").where({"id_sp": id_sp})
   },
   findById(id) {
-    return mapProduct().where({"id_sp": id})   
+    return mapProduct()
+    .where({"id_sp": id})   
   },
   findByNameWithPaging(name, offset, per_page){
     return mapProduct().where("san_pham.ten", "LIKE" ,"%" + name + "%").andWhere("isLocked", 0).offset(offset).limit(per_page);

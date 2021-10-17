@@ -11,13 +11,6 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
-
-// const socketIo = require("socket.io")(app, {
-//     cors: {
-//         origin: "*",
-//     }
-// }); 
-
 ///// Guest
 
 app.use('/', require('./routes/BaoMat'));
@@ -57,6 +50,15 @@ app.use(function(err, req, res, next) {
     });
 });
 
-app.listen(PORT, function() {
+let server = app.listen(PORT, function() {
     console.log(`Application is running at http://localhost:${PORT}`);
 });
+
+
+var io = require("socket.io")(server, {
+    cors: {
+      origin: "*",
+    },
+  });
+app.set("socketio", io);
+require('./main-socketio')(io);

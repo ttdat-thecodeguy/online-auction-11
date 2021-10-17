@@ -3,6 +3,10 @@ const Authentiaction = require('../../middlewares/auth')
 const express = require('express');
 const router = express.Router();
 
+const sanPhamModel = require('../../services/sanPhamModel')
+const donHangModel = require('../../services/datHangModel')
+const mailer = require('../../utils/mailer')
+const dauGiaModel = require('../../services/dauGiaModel')
 ///// Mua Sản Phẩm
 
 router.post('/mua-san-pham',[Authentiaction.requireUser] ,async(req, res)=>{
