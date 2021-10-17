@@ -39,8 +39,9 @@ router.get('/kiem-tra-san-pham', async function (req, res) {
             messeage: "Product not invalid"
         })
     }
-    let yeu_thich = yeuThichModel.findYeuThich(id_san_pham, id)
-    if(yeu_thich == null) {
+    let yeu_thich = await yeuThichModel.findYeuThich(id_san_pham, id)
+    console.log(yeu_thich)
+    if(yeu_thich == null || yeu_thich == undefined) {
         return res.json({
             isLiked: false
         })
