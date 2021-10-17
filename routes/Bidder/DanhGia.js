@@ -27,8 +27,31 @@ router.get("/nhan-xet-cua-toi", async (req, res)=>{
       diem: nx.isDuong ? 1 : -1
     }
   })
-
   return res.status(200).json(nhan_xet)
+})
+
+router.get('/da-danh-gia', async (req, res)=>{
+  const id = req.accessTokenPayload.id || 0;
+  const target = req.query.target;
+  if(id == 0){
+    res.status(401).json({
+      messeage: "User Invalid"
+    })
+  }
+  const nhan_xet = await danhGiaModel.isDaDanhGia(id, target);
+  if(nhan_xet == null){
+    return res.json({
+      isRate: false
+    })
+  }
+  else{
+    return res.json({
+      isRate: true
+    })
+  }
+
+
+
 })
 
 router.get("/danh-gia-ve-toi", async (req, res)=>{

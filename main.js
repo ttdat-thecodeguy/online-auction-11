@@ -19,6 +19,7 @@ app.use('/api/danh-muc', require('./routes/DanhMuc'))
 
 ///// user - bidger 
 app.use('/api/tai-khoan',  require('./routes/Bidder/SanPham'))
+app.use('/api/tai-khoan',  require('./routes/TaiKhoan'))
 app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/Bidder/TaiKhoan'))
 app.use('/api/tai-khoan', Authentiaction.requireUser, require('./routes/Bidder/DanhGia'))
 app.use('/api/tai-khoan/yeu-thich', Authentiaction.requireUser, require('./routes/Bidder/YeuThich'))
