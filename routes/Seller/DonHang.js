@@ -15,7 +15,6 @@ router.get('/thong-ke-don-hang', async function (req, res) {
     for(let i = 0; i < don_hang.length;i++){
         let dh = don_hang[i]
         dh.path = Utils.toPath(dh.ten, dh.id_sp)
-        delete dh.status
         arr.push(dh) 
     }
     return res.status(200).json(arr)
