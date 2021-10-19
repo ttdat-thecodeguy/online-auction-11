@@ -3,18 +3,23 @@ const router = express.Router();
 
 const donHangModel = require('../../services/datHangModel')
 const taiKhoanModel = require('../../services/taiKhoanModel')
-const danhGiaModel = require('../../services/danhGiaModel')
+const danhGiaModel = require('../../services/danhGiaModel');
+const db = require('../../utils/db');
+const Utils = require("../../utils/Utils");
 
 router.get('/thong-ke-don-hang', async function (req, res) {
     let id_nguoi_ban = req.accessTokenPayload.id || 0;
 
     let don_hang = await donHangModel.ThongKeDonHang(id_nguoi_ban)
-    don_hang = don_hang.map(dh => {
-        delete dh.id_trang_thai
+    let arr = []
+    for(let i = 0; i < don_hang.length;i++){
+        let dh = don_hang[i]
+        dh.path = Utils.toPath(dh.ten, dh.id_sp)
         delete dh.status
-        return {...dh}
-    })
-    return res.status(200).json(don_hang)
+        delete dh.ten
+        arr.push(dh) 
+    }
+    return res.status(200).json(arr)
 })
 /*
     {
