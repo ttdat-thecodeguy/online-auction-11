@@ -8,6 +8,8 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const saltRounds = 10;
 
+const Utils = require('../../utils/Utils')
+
 router.get("/details", async function (req, res) {
   //set header = x-access-token
   const id = req.accessTokenPayload.id || 0;
@@ -40,6 +42,7 @@ router.get("/lich-su-dau-gia", async (req, res) => {
         ten: r.ten_status,
       },
       ngay_dat: r.ngay_dat,
+      path: Utils.toPath(r.ten_sp, r.id_sp)
     };
   });
   return res.status(200).json(rows);
@@ -70,7 +73,25 @@ router.post("/doi-mat-khau", async (req, res) => {
   });
 });
 
-router.get("/yeu-cau-nang-cap", async (req, res) => {
+
+router.get("/yeu-cau-nang-cap/tim-kiem", async (req, res) => {
+  const id = req.accessTokenPayload.id || 0;
+  const quyen_han = req.query.quyen_han;
+
+  const requirement = await taiKhoanModel.findNangCapTKById(id, quyen_han);
+  if(requirement == null){
+    return res.json({
+      isUpRole : false
+    })
+  }else{
+    return res.json({
+      isUpRole : true
+    })
+  }
+})
+
+
+router.get("/yeu-cau-nang-cap/yeu-cau", async (req, res) => {
   const id = req.accessTokenPayload.id || 0;
   const quyen_han = req.query.quyen_han;
 

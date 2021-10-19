@@ -18,6 +18,7 @@ router.get("/nhan-xet-cua-toi", async (req, res)=>{
   nhan_xet = nhan_xet.map(nx => {
     return {
       nguoi_bi_danh_gia:{
+        id: nx.id_nguoi_dung,
         ho_ten: nx.ho_ten,
         email: nx.email,
         diem_duong: nx.diem_danhgia_duong,
@@ -49,9 +50,6 @@ router.get('/da-danh-gia', async (req, res)=>{
       isRate: true
     })
   }
-
-
-
 })
 
 router.get("/danh-gia-ve-toi", async (req, res)=>{
@@ -66,6 +64,7 @@ router.get("/danh-gia-ve-toi", async (req, res)=>{
   nhan_xet = nhan_xet.map(nx => {
     return {
       nguoi_danh_gia:{
+        id: nx.id_nguoi_dung,
         ho_ten: nx.ho_ten,
         email: nx.email,
         diem_duong: nx.diem_danhgia_duong,

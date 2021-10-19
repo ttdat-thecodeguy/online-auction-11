@@ -9,12 +9,12 @@ module.exports = {
   findByNguoiDanhGia(nguoi_danh_gia){
     return db(table).join("tai_khoan", "danh_gia.nguoi_bi_danh_gia","tai_khoan.id_nguoi_dung")
             .where("nguoi_danh_gia", nguoi_danh_gia)
-            .select("tai_khoan.email", "tai_khoan.ho_ten", "tai_khoan.diem_danhgia_duong", "tai_khoan.diem_danhgia_am", "danh_gia.nhan_xet","danh_gia.isDuong")
+            .select("tai_khoan.id_nguoi_dung","tai_khoan.email", "tai_khoan.ho_ten", "tai_khoan.diem_danhgia_duong", "tai_khoan.diem_danhgia_am", "danh_gia.nhan_xet","danh_gia.isDuong")
   },
   findByNguoiBiDanhGia(nguoi_bi_danh_gia){
     return db(table).join("tai_khoan", "danh_gia.nguoi_danh_gia","tai_khoan.id_nguoi_dung")
             .where("nguoi_bi_danh_gia", nguoi_bi_danh_gia)
-            .select("tai_khoan.email", "tai_khoan.ho_ten", "tai_khoan.diem_danhgia_duong", "tai_khoan.diem_danhgia_am", "danh_gia.nhan_xet","danh_gia.isDuong")
+            .select("tai_khoan.id_nguoi_dung","tai_khoan.email", "tai_khoan.ho_ten", "tai_khoan.diem_danhgia_duong", "tai_khoan.diem_danhgia_am", "danh_gia.nhan_xet","danh_gia.isDuong")
   },
   isDaDanhGia(id, target){
     return db(table).where({"nguoi_danh_gia": id, "nguoi_bi_danh_gia": target}).first();

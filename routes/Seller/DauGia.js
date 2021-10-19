@@ -32,7 +32,7 @@ router.get("/tu-choi-ra-gia" ,async (req, res)=>{
   if(count == 0 || count == null){
     return res.json({
       messeage: "auction is empty"
-    }).status(500)
+    }).status(200)
   }
 
 

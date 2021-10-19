@@ -12,7 +12,7 @@ module.exports = {
     findByNguoiDauGia(id){
         return db(table).join("san_pham", "dau_gia.id_sp", "san_pham.id_sp")
                         .join("trang_thai", "dau_gia.status", "trang_thai.id")
-                        .select("san_pham.ten as ten_sp", "dau_gia.gia_tra_cao_nhat as gia_tra", "dau_gia.gia_khoi_diem as gia_mua", "dau_gia.status", "trang_thai.ten as ten_status", "dau_gia.ngay_dat")
+                        .select("san_pham.id_sp as id_sp","san_pham.ten as ten_sp", "dau_gia.gia_tra_cao_nhat as gia_tra", "dau_gia.gia_khoi_diem as gia_mua", "dau_gia.status", "trang_thai.ten as ten_status", "dau_gia.ngay_dat")
     },
     findByStatus(id_nguoi_ban, status){
         return db(table).where({"id_nguoi_ban":id_nguoi_ban,"status": status})
