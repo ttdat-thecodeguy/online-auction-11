@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
 
 const donHangModel = require('../../services/datHangModel')
@@ -16,7 +16,6 @@ router.get('/thong-ke-don-hang', async function (req, res) {
         let dh = don_hang[i]
         dh.path = Utils.toPath(dh.ten, dh.id_sp)
         delete dh.status
-        delete dh.ten
         arr.push(dh) 
     }
     return res.status(200).json(arr)
