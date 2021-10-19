@@ -27,19 +27,6 @@ router.get('/tim-kiem', async (req, res)=>{
     let product = null;
     
     let t = null
-    if(name != null && cate == null){ 
-        product = await sanPhamModel.findByNameWithPaging(name, offset, per_page)
-
-        /// order by name
-        if(time != null && price == null){
-            product = await sanPhamModel.filterAndSearchByNameWithPaging(name, offset, per_page, "end_date", "desc")
-        }
-        else if(time == null && price != null){
-            product = await sanPhamModel.filterAndSearchByNameWithPaging(name, offset, per_page,"gia_hien_tai", "asc")
-        }
-     
-        t = await sanPhamModel.countByName(name)
-    }
 
     else if(cate != null && name == null) {
         if(isNaN(parseInt(cate))){
