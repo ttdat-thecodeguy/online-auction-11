@@ -7,7 +7,8 @@ const danhGiaModel = require("../../services/danhGiaModel")
 const camDauGiaModel = require("../../services/camDauGiaModel")
 const router = express.Router();
 
-const mailer = require('../../utils/mailer')
+const mailer = require('../../utils/mailer');
+const Utils = require("../../utils/Utils");
 /// từ chối lượt ra giá của người cao nhất và chuyển cho người thứ 2
 
 router.get("/tu-choi-ra-gia" ,async (req, res)=>{
@@ -70,7 +71,12 @@ router.get("/danh-sach-cho", async (req, res) => {
     });
   }
   const rows = await dauGiaModel.findByStatus(id, 3);
-  return res.status(200).json(rows);
+  let arr = []
+  for(let i = 0; i< rows.length;i++){
+    rows[i].path = Utils.toPath(rows[i].ten_sp, rows[i].id_sp)
+    arr.push(rows[i])
+  }
+  return res.status(200).json(arr);
 });
 
 //// chấp thuận cho các chiếu mới

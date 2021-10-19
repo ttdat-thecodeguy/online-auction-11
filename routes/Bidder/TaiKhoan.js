@@ -33,6 +33,7 @@ router.get("/lich-su-dau-gia", async (req, res) => {
   rows = rows.map((r) => {
     return {
       ten_sp: r.ten_sp,
+      anh: r.anh,
       dau_gia: {
         gia_khoi_diem: r.gia_tra,
         gia_mua: r.gia_mua,

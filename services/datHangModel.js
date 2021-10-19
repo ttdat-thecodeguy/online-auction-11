@@ -7,7 +7,7 @@ module.exports = {
             .join("tai_khoan", "dat_hang.id_nguoi_mua","tai_khoan.id_nguoi_dung")
             .join("san_pham", "dat_hang.id_sp", "san_pham.id_sp")
             .where("dat_hang.id_nguoi_ban", id_nguoi_ban)
-            .select("san_pham.id_sp", "san_pham.ten", "tai_khoan.id_nguoi_dung" ,"tai_khoan.ho_ten", "trang_thai_dathang.ten_trang_thai", "dat_hang.gia_mua", "dat_hang.ngay_dat_hang")
+            .select("san_pham.id_sp", "san_pham.ten", "tai_khoan.id_nguoi_dung" ,"tai_khoan.ho_ten", "trang_thai_dathang.ten_trang_thai", "dat_hang.gia_mua", "dat_hang.ngay_dat_hang", "dat_hang.status")
   },
   themDonHang(donhang){
     return db("dat_hang").insert(donhang);
