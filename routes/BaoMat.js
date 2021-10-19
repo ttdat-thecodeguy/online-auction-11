@@ -166,7 +166,7 @@ router.post('/quen-mat-khau/activation', async (req, res) => {
 
     const payload = {id: user.id_nguoi_dung};
     const opts = {
-        expiresIn: 48 * 60 * 60, // seconds
+        expiresIn: 24 * 60 * 60, // seconds
     };
     const accessToken = jwt.sign(payload, 'SECRET_KEY', opts);
     delete user.OTP;
