@@ -16,6 +16,7 @@ module.exports = {
     return db(table)
       .join("san_pham", "dau_gia.id_sp", "san_pham.id_sp")
       .join("trang_thai", "dau_gia.status", "trang_thai.id")
+      .where("dau_gia.id_nguoi_dau_gia",id)
       .select(
         "san_pham.id_sp as id_sp",
         "san_pham.ten as ten_sp",

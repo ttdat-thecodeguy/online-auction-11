@@ -29,8 +29,9 @@ router.get('/tu-choi-ra-gia', async (req, res) => {
         }).status(401);
     }
 
-    let count = await dauGiaModel.countDauGiaBySanPham(id_sanpham);
-    if (count == 0 || count == null) {
+    let rs = await dauGiaModel.countDauGiaBySanPham(id_sanpham);
+    
+    if (rs == null || rs.count == 0) {
         return res.json({
             messeage: 'auction is empty'
         }).status(200);
@@ -39,7 +40,7 @@ router.get('/tu-choi-ra-gia', async (req, res) => {
     let caoNhat = await dauGiaModel.findDauGiaCaoNhat(id_sanpham);
     if (caoNhat == null) {
         return res.json({
-            messeage: 'something went wrong'
+            messeage: 'top not found'
         });
     }
     let aff_rows = await dauGiaModel.khoaDauGiaCaoNhat(id_sanpham, caoNhat.id_nguoi_dau_gia);
