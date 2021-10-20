@@ -30,6 +30,9 @@ module.exports = {
   findByIdNguoiDung(id){
     return mapProduct().where("yeu_thich.id_nguoi_dung",id)
   },
+  findYeuThich(id, idNguoiDung){
+    return db(table).where({'id_san_pham': id, 'id_nguoi_dung': idNguoiDung}).first()
+  },
   add(id_nguoi_dung,id_san_pham) {
     return db(table).insert({
         id_nguoi_dung,

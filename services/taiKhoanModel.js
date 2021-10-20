@@ -46,6 +46,12 @@ module.exports = {
       id_nguoi_dung
     }).first()
   },
+  findNangCapTKById(id_nguoi_dung, id_quyen_han_mong_muon){
+    return db("nang_cap_tk").where({
+      id_nguoi_dung,
+      id_quyen_han_mong_muon
+    }).first()
+  },
   updateYeuCau(id_nguoi_dung, id_quyen_han_mong_muon){
     return db("nang_cap_tk").where({
       id_nguoi_dung
