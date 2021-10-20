@@ -16,6 +16,7 @@ router.get('/detail-user', async function (req, res) {
     }).status(200);
   }
   return res.json({
+    success: false,
     message: 'Không tìm thấy tài khoản cần tìm',
   }).status(200);
 });
@@ -51,6 +52,7 @@ router.post('/add-user/', validateSchema(schemaUser.them_nguoi_dung), async func
     
     if(userExists !== null){
       return res.json({
+        success: false,
         message: 'Tài khoản đã tồn tại'
       }).status(201);
     }
@@ -66,11 +68,13 @@ router.post('/add-user/', validateSchema(schemaUser.them_nguoi_dung), async func
     console.log(userAdded);
     if(userAdded.length !== 0){
       return res.json({
+        success: true,
         message: 'Thêm người dùng thành công',
         mat_khau: matkhau,
       }).status(200);
     }
     return res.json({
+      success: false,
       message: 'Thêm người dùng thất bại',
     }).status(201);
 });
@@ -80,6 +84,7 @@ router.delete('/delete-user/', async function(req, res){
 
   if(!id){
     return res.json({
+      success: false,
       message: 'Không tìm thấy người dùng cần xóa'
     }).status(201);
   }
@@ -87,10 +92,12 @@ router.delete('/delete-user/', async function(req, res){
   const userDeleted = await taiKhoanModel.del(id);
   if(userDeleted){
     return res.json({
+      success: true,
       message: 'Người dùng đã được xóa',
     }).status(200);
   }
   return res.json({
+    success: false,
     message: 'Người dùng không tồn tại',
   }).status(201);
 });
@@ -101,6 +108,7 @@ router.put('/update-user-infor/', validateSchema(schemaUser.cap_nhat_nguoi_dung)
   
   if(!id){
     return res.json({
+      success: false,
       message: 'Không tìm thấy người dùng cần cập nhật'
     }).status(201);
   }
@@ -108,11 +116,13 @@ router.put('/update-user-infor/', validateSchema(schemaUser.cap_nhat_nguoi_dung)
   const userUpdated = await taiKhoanModel.update(id, userObject);
   if(userUpdated){
     return res.json({
+      success: true,
       message: 'Tài khoản người dùng cập nhật thành công',
       user: userObject
     }).status(200);
   }
   return res.json({
+    success: false,
     message: 'Cập nhật tài khoản thất bại'
   }).status(201);
 });
@@ -123,6 +133,7 @@ router.put('/update-user-level/', validateSchema(schemaUser.cap_nhat_cap_bac), a
 
   if(!id){
     return res.json({
+      success: false,
       message: 'Không tìm thấy người dùng cần cập nhật'
     }).status(201);
   }
@@ -130,12 +141,14 @@ router.put('/update-user-level/', validateSchema(schemaUser.cap_nhat_cap_bac), a
   const userUpdated = await taiKhoanModel.updateCapBac(id, level);
   if(userUpdated){
     return res.json({
+      success: true,
       message: 'Cấp bậc người dùng cập nhật thành công',
       user: level
     }).status(200);
   }
 
   return res.json({
+    success: false,
     message: 'Cập nhật cấp bậc thất bại'
   }).status(201);
 });
