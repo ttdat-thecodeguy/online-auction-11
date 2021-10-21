@@ -3,7 +3,7 @@ const router = express.Router();
 
 const sanPhamModel = require('../services/sanPhamModel')
 const Utils = require('../utils/Utils')
-
+const dauGiaModel = require('../services/dauGiaModel')
 
 ////// search
 //Tìm Kiếm Theo tên sản phẩm hoặc danh mục
@@ -224,6 +224,25 @@ router.get("/5-san-pham-gia-cao-nhat", async (req, res)=>{
     return res.json(arr_product)
 })
 
+router.get('/dau-gia/so-luong', async (req, res)=>{
+    let id_sp = req.query.id_sp
+    let rs = await dauGiaModel.countDauGiaBySanPham(id_sp)
+    if(rs === null){
+        return res.json({
+            count: 0
+        })
+    }else{
+        return res.json({
+            count: rs.count
+        })
+    }
+})
+
+router.get('/dau-gia/cao-nhat', async (req, res)=>{
+    let id_sp = req.query.id_sp
+    let cao_nhat = await dauGiaModel.findDauGiaCaoNhat(id_sp)
+    return res.json(cao_nhat)
+})
 //// CRUD
 
 
