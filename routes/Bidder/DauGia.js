@@ -133,8 +133,7 @@ router.post('/tham-gia', [Authentication.requireUser, Authentication.requireDiem
         });
 
         return res.json({messeage: 'win', isWin: true, gia_hien_tai: gia_dat}).status(200).end();
-    }
-    else {
+    } else {
         // find người đấu giá cao nhất
         let cao_nhat = await dauGiaModel.findDauGiaCaoNhat(id_sp);
 

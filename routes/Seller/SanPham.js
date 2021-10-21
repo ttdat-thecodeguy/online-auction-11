@@ -47,7 +47,8 @@ router.post('/them-san-pham', [upload.any()], async (req, res) => {
                 {
                     resource_type: 'image', public_id: `product/${anh}`,
                     overwrite: false
-                }, function (error) { });
+                }, function (error) {
+                });
             // console.log(res)
             // anh.id_sp = result
             await anhModel.add({
@@ -55,7 +56,8 @@ router.post('/them-san-pham', [upload.any()], async (req, res) => {
                 id_sp: result
             });
         }
-    } catch (err) {}
+    } catch (err) {
+    }
     product.path = Utils.toPath(product.ten, result);
     return res.json({
         messeage: 'Add product',
