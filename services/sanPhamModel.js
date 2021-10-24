@@ -38,6 +38,9 @@ module.exports = {
   findAll(offset, per_page){
     return mapProduct().where("isLocked", 0).limit(per_page).offset(offset)
   },
+  findAllBySeller(id_seller){
+    return mapProduct().where('id_nguoi_ban', id_seller);
+  },
   findAllKetThuc(){
     return db(table)
     .join("tai_khoan", "san_pham.id_nguoi_ban", "tai_khoan.id_nguoi_dung")

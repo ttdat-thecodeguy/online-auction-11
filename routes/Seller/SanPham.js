@@ -13,6 +13,19 @@ const sanPhamModel = require('../../services/sanPhamModel');
 
 const Utils = require('../../utils/Utils');
 
+
+
+router.get('/danh-sach-san-pham', async (req, res) => {
+    let id_nguoi_ban = req.accessTokenPayload.id || 0;
+    let product = await sanPhamModel.findAllBySeller(id_nguoi_ban)
+    let arr_product = []
+    for(let i = 0;i < product.length;i++){
+        let anh = await sanPhamModel.findImageById(product[i].id_sp)
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
+    }
+    return res.json(arr_product)
+});
+
 router.post('/them-san-pham', [upload.any()], async (req, res) => {
     const product = req.body;
     let id_nguoi_ban = req.accessTokenPayload.id || 0;
