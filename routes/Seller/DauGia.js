@@ -30,7 +30,7 @@ router.get('/tu-choi-ra-gia', async (req, res) => {
     }
 
     let rs = await dauGiaModel.countDauGiaBySanPham(id_sanpham);
-    
+
     if (rs == null || rs.count == 0) {
         return res.json({
             messeage: 'auction is empty'
@@ -118,7 +118,7 @@ router.get('/chap-thuan', async (req, res) => {
             to: `${sp.email}`,
             subject: 'OnlineAuction11: Chúc Mừng Nhà Vô Địch.',
             html: `
-            Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn hiện đã có người đấu giá với giá mua ${ yeu_cau.gia_khoi_diem} là .
+            Xin chào ${sp.ho_ten}, Chúc Mừng bạn, Sản Phẩm của bạn hiện đã có người đấu giá với giá mua ${yeu_cau.gia_khoi_diem} là .
             (Đây là thư tự động vui lòng không phản hồi)
             `,
         });

@@ -44,8 +44,7 @@ router.get('/da-danh-gia', async (req, res) => {
         return res.json({
             isRate: false
         });
-    }
-    else {
+    } else {
         return res.json({
             isRate: true
         });
