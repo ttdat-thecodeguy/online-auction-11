@@ -27,6 +27,9 @@ module.exports = {
   findAll() {
     return mapProduct()    
   },
+  findByIdNguoiDungThuGon(id){
+    return db(table).where("yeu_thich.id_nguoi_dung",id).select("yeu_thich.id_san_pham")
+  },
   findByIdNguoiDung(id){
     return mapProduct().where("yeu_thich.id_nguoi_dung",id)
   },

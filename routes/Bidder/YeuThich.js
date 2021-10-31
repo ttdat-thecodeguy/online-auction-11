@@ -15,6 +15,13 @@ router.get('/xem-danh-sach', async function (req, res) {
     return res.json(arr_product).end();
 });
 
+router.get('/xem-danh-sach/thu-gon', async function (req, res) {
+    const id = req.accessTokenPayload.id || 0;
+    
+    let product = await yeuThichModel.findByIdNguoiDungThuGon(id);
+    return res.json(product).end()
+})
+
 router.get('/them-san-pham', async function (req, res) {
     const id = req.accessTokenPayload.id || 0;
     const id_san_pham = req.query.san_pham || 0;
