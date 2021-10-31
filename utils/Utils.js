@@ -37,10 +37,15 @@ module.exports = {
         for(let i = 0;i < arr.length - 1;i++) path += removeTV(arr[i]) + "-";
         return (path + removeTV(arr[arr.length - 1])    )
     },
-    mapProduct : (product, id, anh) => {        
+    mapProductByDetails : (product, id, anh) => {
+        let resProduct = module.exports.mapProduct(product, id);
+        resProduct.anh_phu = anh
+        return resProduct
+    },
+    mapProduct : (product, id) => {    
         if(product.cap_danh_muc == 0) product.cap_danh_muc = "Điện thoại";
         else product.cap_danh_muc = "Máy tính";
-    
+        
         product.danh_muc =  {
             id : product.id_danh_muc,
             ten : product.ten_danh_muc,
@@ -55,7 +60,6 @@ module.exports = {
             diem_am: product.diem_am
         }
 
-        product.anh_phu = anh
         
         delete product.id_nguoi_ban
         delete product.ho_ten

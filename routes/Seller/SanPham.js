@@ -30,8 +30,7 @@ router.get("/danh-sach-san-pham", async (req, res) => {
   let product = await sanPhamModel.findAllBySeller(id_nguoi_ban);
   let arr_product = [];
   for (let i = 0; i < product.length; i++) {
-    let anh = await sanPhamModel.findImageById(product[i].id_sp);
-    arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh));
+    arr_product.push(Utils.mapProduct(product[i], product[i].id_sp));
   }
   return res.json(arr_product);
 });

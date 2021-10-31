@@ -14,6 +14,7 @@ function mapProduct() {
         "san_pham.gia_mua_ngay",
         "san_pham.gia_hien_tai",
         "san_pham.buoc_gia",
+        "san_pham.luot_daugia",
         "tai_khoan.email",
         "tai_khoan.id_nguoi_dung as id_nguoi_ban",
         "tai_khoan.diem_danhgia_duong as diem_duong",

@@ -10,8 +10,7 @@ router.get('/xem-danh-sach', async function (req, res) {
     let product = await yeuThichModel.findByIdNguoiDung(id);
     let arr_product = [];
     for (let i = 0; i < product.length; i++) {
-        let anh = await sanPhamModel.findImageById(product[i].id_sp);
-        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh));
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp));
     }
     return res.json(arr_product).end();
 });
@@ -39,7 +38,6 @@ router.get('/kiem-tra-san-pham', async function (req, res) {
         });
     }
     let yeu_thich = await yeuThichModel.findYeuThich(id_san_pham, id);
-    console.log(yeu_thich);
     if (yeu_thich == null || yeu_thich == undefined) {
         return res.json({
             isLiked: false

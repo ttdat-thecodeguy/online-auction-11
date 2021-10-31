@@ -83,8 +83,7 @@ router.get('/tim-kiem', async (req, res)=>{
 
     let arr_product = []
     for(let i = 0;i < product.length;i++){
-        let anh = await sanPhamModel.findImageById(product[i].id_sp)
-        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp))
     }
     return res.json({
         products: arr_product,
@@ -151,7 +150,7 @@ router.get('/details/:name', async (req, res) => {
         }).status(404)
     }
     let anh = await sanPhamModel.findImageById(id)
-    product =  Utils.mapProduct(product[0], id, anh)
+    product =  Utils.mapProductByDetails(product[0], id, anh)
 
     // let product_same_cate = await sanPhamModel.findByProductSameCate(product.danh_muc.id, 5)
     // let arr_product = []
@@ -171,8 +170,7 @@ router.get("/5-san-pham-cung-danh-muc", async (req, res)=>{
     let product_same_cate = await sanPhamModel.findByProductSameCate(danh_muc, parseInt(size))
     let arr_product = []
     for(let i = 0;i < product_same_cate.length;i++){
-        let anh = await sanPhamModel.findImageById(product_same_cate[i].id_sp)
-        arr_product.push(Utils.mapProduct(product_same_cate[i], product_same_cate[i].id_sp, anh))
+        arr_product.push(Utils.mapProduct(product_same_cate[i], product_same_cate[i].id_sp))
     }
     return res.json(arr_product)
 })
@@ -188,8 +186,7 @@ router.get("/5-san-pham-gan-ket-thuc", async (req, res)=>{
     }
     let arr_product = []
     for(let i = 0;i < product.length;i++){
-        let anh = await sanPhamModel.findImageById(product[i].id_sp)
-        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp))
     }
     return res.json(arr_product)
 })
@@ -203,8 +200,7 @@ router.get("/5-san-pham-nhieu-luot-ra-gia", async (req, res)=>{
     }
     let arr_product = []
     for(let i = 0;i < product.length;i++){
-        let anh = await sanPhamModel.findImageById(product[i].id_sp)
-        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp))
     }
     return res.json(arr_product)
 })
@@ -218,8 +214,7 @@ router.get("/5-san-pham-gia-cao-nhat", async (req, res)=>{
     }
     let arr_product = []
     for(let i = 0;i < product.length;i++){
-        let anh = await sanPhamModel.findImageById(product[i].id_sp)
-        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp, anh))
+        arr_product.push(Utils.mapProduct(product[i], product[i].id_sp))
     }
     return res.json(arr_product)
 })
