@@ -34,6 +34,50 @@ router.get('/list-user-upgrade', async function (req, res) {
   return res.json(rows)
 });
 
+router.get('/accept-upgrade', async function (req, res) {
+  let id = req.query.id_nguoi_dung
+
+  if (!id) {
+    return res.json({
+      success: false,
+      message: 'Không tìm thấy người dùng cần cập nhật'
+    }).status(201);
+  } 
+  // upgrade level
+  const userUpdated = await taiKhoanModel.updateCapBac(id, 2);
+  if (userUpdated) {
+    // delete 
+    await taiKhoanModel.deleteAccountWaitingUpgrade(id)
+    return res.json({
+      success: true,
+      message: 'Cấp bậc người dùng cập nhật thành công',
+      user: 2
+    }).status(200);
+  }
+
+  return res.json({
+    success: false,
+    message: 'Cập nhật cấp bậc thất bại'
+  }).status(201);
+
+})
+
+router.get('/decline-upgrade', async (req, res) =>{
+  let id = req.query.id_nguoi_dung
+  
+  const isDelete = await taiKhoanModel.deleteAccountWaitingUpgrade(id);
+  if(isDelete){
+    return res.json({
+      message: "Hủy Thành Công"
+    }).status(200)
+  }else{
+    return res.json({
+      message: "Hủy Thất Bại"
+    }).status(200)
+  }
+
+})
+
 router.get('/list-user/', async function (req, res) {
   const listUser = await taiKhoanModel.findAll();
   let total = await taiKhoanModel.countUser();

@@ -7,6 +7,8 @@ const taiKhoanModel = require('../../services/taiKhoanModel');
 const sanPhamModel = require('../../services/sanPhamModel');
 const dauGiaModel = require('../../services/dauGiaModel');
 const camDauGiaModel = require('../../services/camDauGiaModel');
+const donHangModel = require('../../services/datHangModel');
+
 const Utils = require('../../utils/Utils');
 const mailer = require('../../utils/mailer');
 
@@ -101,6 +103,41 @@ router.post('/tham-gia', [Authentication.requireUser, Authentication.requireDiem
             isWin: false
         });
     }
+
+    //// nếu giá đấu giá vượt qua giá mua thì cho thắng luôn
+    if(sp_daugia.gia_dat >= sp.gia_mua_ngay){
+        const don_hang_rs = {
+            id_sp: sp.id_sp,
+            id_nguoi_mua: id,
+            id_nguoi_ban: sp.id_nguoi_ban,
+            gia_mua: sp.gia_mua_ngay,
+            ngay_dat_hang: new Date(),
+        };
+
+        console.log(sp);
+        console.log(don_hang_rs);
+
+        await donHangModel.themDonHang(don_hang_rs);
+        /// thông báo cho người mua
+        await mailer.send({
+            from: 'online.auction.11team@gmail.com',
+            to: `${sp.email}`,
+            subject: `OnlineAuction11: Món Hàng ${sp.ten_sp} của bạn đã có người mua.`,
+            html: `
+                  Xin chào ${sp.ho_ten}, Món hàng ${sp.ten_sp} của bạn đã kết thúc.
+                  <br> 
+                      Chúng tôi thông báo với bạn rằng món hàng của bạn đã có người mua
+                  <br>
+                  (Đây là thư tự động vui lòng không phản hồi)
+                  `,
+        });
+        /// khóa toàn bộ cuộc đấu giá đang diễn ra
+        await dauGiaModel.updateStatus(sp.id_sp, 2);
+
+        await sanPhamModel.updateStatus(sp.id_sp, 1);
+        return res.json({messeage: 'get product', isWin: true, gia_hien_tai: sp.gia_mua_ngay}).status(200).end();
+    }
+
     /// nếu chưa có lượt đấu giá nào cho sp này
     if (luot_dau_gia == 0) {
         ////// trường hợp được đấu giá #0

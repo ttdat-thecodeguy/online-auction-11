@@ -43,11 +43,11 @@ router.post('/mua-san-pham', [Authentiaction.requireUser], async (req, res) => {
     await mailer.send({
         from: 'online.auction.11team@gmail.com',
         to: `${sp.email}`,
-        subject: `OnlineAuction11: Món Hàng ${sp.ten_sp} của bạn đã kết thúc và không có ai đấu giá.`,
+        subject: `OnlineAuction11: Món Hàng ${sp.ten_sp} của bạn đã có người mua.`,
         html: `
               Xin chào ${sp.ho_ten}, Món hàng ${sp.ten_sp} của bạn đã kết thúc.
               <br> 
-                  Chúng tôi rất tiếc khi không có người đấu giá, bạn có thể mở lại cuộc đấu giá trong trình quản lí trang web
+                  Chúng tôi thông báo với bạn rằng món hàng của bạn đã có người mua
               <br>
               (Đây là thư tự động vui lòng không phản hồi)
               `,
