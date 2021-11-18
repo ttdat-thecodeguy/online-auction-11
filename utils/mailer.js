@@ -4,13 +4,13 @@ var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: 'online.auction.11team@gmail.com',
-      pass: '11onlineauctionteam'
+      pass: 'igfkfaqpvvualtim'
     }
 });
 
 // var defaultMail = {
 //     from: 'nhatrovn.nhom4@gmail.com',
-//     text: 'test text',
+//     text: '11onlineauctionteam',
 // };
 
 module.exports ={

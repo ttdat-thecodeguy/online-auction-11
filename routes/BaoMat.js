@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 const taiKhoanModel = require('../services/taiKhoanModel');
@@ -31,6 +31,7 @@ router.post('/dang-ki', async function (req, res) {
             };
 
             await taiKhoanModel.add(register);
+	    console.log(register.email)
             await mailer.send({
                 from: 'online.auction.11team@gmail.com',
                 to: `${register.email}`,
