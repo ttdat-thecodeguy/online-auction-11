@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 
 const dauGiaModel = require("../../services/dauGiaModel");
 const sanPhamModel = require("../../services/sanPhamModel");
@@ -114,7 +114,7 @@ router.get("/chap-thuan", async (req, res) => {
   if (sp.length != 0) {
     sp = sp[0];
   }
-
+  sp.path = Utils.toPath(sp.ten_sp, sp.id_sp);	
   let nguoi_dau_gia = await taiKhoanModel.findById(yeu_cau.id_nguoi_dau_gia);
 
   //// nếu giá đấu giá vượt qua giá mua thì cho thắng luôn
@@ -262,7 +262,7 @@ router.get("/chap-thuan", async (req, res) => {
         to: `${cao_nhat.email}`,
         subject: "OnlineAuction11: Chúc Mừng Nhà Vô Địch.",
         html: `
-                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại ${sp.ten_sp}  Đã Bị đặt giá trên.      
+                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại <a href="http://localhost:3000/san-pham/${sp.path}">${sp.ten_sp}</a>  Đã Bị đặt giá trên.      
                 (Đây là thư tự động vui lòng không phản hồi)
                 `
       });

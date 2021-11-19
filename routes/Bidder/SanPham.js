@@ -7,6 +7,20 @@ const sanPhamModel = require('../../services/sanPhamModel');
 const donHangModel = require('../../services/datHangModel');
 const mailer = require('../../utils/mailer');
 const dauGiaModel = require('../../services/dauGiaModel');
+const Utils = require('../../utils/Utils');
+
+router.get('/san-pham/da-thang', [Authentiaction.requireUser] ,async (req, res)=>{
+    let id = req.accessTokenPayload.id || 0;
+    let don_hang = await donHangModel.SPDaThangCuaToi(id);
+    let arr = [];
+    for (let i = 0; i < don_hang.length; i++) {
+        let dh = don_hang[i];
+        dh.path = Utils.toPath(dh.ten, dh.id_sp);
+        arr.push(dh);
+    }
+    return res.status(200).json(arr);
+})
+
 ///// Mua Sản Phẩm
 
 router.post('/mua-san-pham', [Authentiaction.requireUser], async (req, res) => {
@@ -35,8 +49,6 @@ router.post('/mua-san-pham', [Authentiaction.requireUser], async (req, res) => {
         gia_mua: sp.gia_mua_ngay,
         ngay_dat_hang: new Date(),
     };
-    console.log(sp);
-    console.log(don_hang_rs);
 
     await donHangModel.themDonHang(don_hang_rs);
     /// thông báo cho người mua

@@ -13,6 +13,19 @@ const sanPhamModel = require("../../services/sanPhamModel");
 const danhMucModel = require("../../services/danhMucModel");
 const Utils = require("../../utils/Utils");
 
+const mailer = require("../../utils/mailer");
+const dauGiaModel = require("../../services/dauGiaModel")
+
+router.get('/san-pham/con-ton-tai', async (req, res) => {
+  let id_nguoi_ban = req.accessTokenPayload.id || 0;
+  let product = await sanPhamModel.findAllBySellerByStatus(id_nguoi_ban);
+  let arr_product = [];
+  for (let i = 0; i < product.length; i++) {
+    arr_product.push(Utils.mapProduct(product[i], product[i].id_sp));
+  }
+  return res.json(arr_product);
+})
+
 router.post("/them-danh-muc", async (req, res) => {
   let { ten, cap_danh_muc } = req.body;
   let data = {
@@ -121,11 +134,14 @@ router.get("/sua-san-pham", async (req, res) => {
 });
 
 router.patch("/sua-san-pham", async (req, res) => {
+  
   let product = req.body;
   let id_nguoi_ban = req.accessTokenPayload.id || 0;
 
   let product_rs = await sanPhamModel.findById(product.id_sp);
 
+  
+  
   if (product_rs == null || product_rs.length == 0) {
     return res.status(404).json({
       messeage: "product not found"
@@ -155,6 +171,28 @@ router.patch("/sua-san-pham", async (req, res) => {
       messeage: "product not update"
     });
   }
+
+  /// send mail
+  let rows_dg = await dauGiaModel.findAllNguoiDauGia(product.id_sp);
+ 
+  console.log(product_rs)
+
+  product_rs.path = Utils.toPath(product_rs.ten_sp, product_rs.id_sp)
+
+
+
+  for(let i = 0;i < rows_dg.length;i++){
+    await mailer.send({
+      from: 'online.auction.11team@gmail.com',
+      to: `${rows_dg[i].email}`,
+      subject: 'OnlineAuction11: Sản Phẩm Đã Thay Đổi Mô Tả',
+      html: `
+      Xin chào ${rows_dg[i].ho_ten}, Sản Phẩm Hiện Tại <a href="http://localhost:3000/san-pham/${product_rs.path}">${product_rs.ten_sp}</a>  Đã được thêm thông tin mô tả mới.      
+      (Đây là thư tự động vui lòng không phản hồi)
+      `,
+    });
+  }
+
 
   return res.status(200).json({
     messeage: "product update"

@@ -9,8 +9,20 @@ module.exports = {
       .where({ id_sp: id_sp, status: 1 })
       .first();
   },
+  danhsachSPDangDauGia(id_nguoi_dau_gia){
+    return db(table)
+        .join()
+        .where({ id_nguoi_dau_gia, status: 1 }).distinct('dau_gia.id_sp')
+  },
   findByIdDauGia(id_dau_gia) {
     return db(table).where({ id_dau_gia: id_dau_gia }).first();
+  },
+  findAllNguoiDauGia(id_sp){
+    return db(table)
+                    .join("tai_khoan", "dau_gia.id_nguoi_dau_gia", "tai_khoan.id_nguoi_dung")
+                    .where("dau_gia.id_sp", id_sp)
+                    .select( "tai_khoan.id_nguoi_dung as id_nguoi_dau_gia",
+                    "tai_khoan.ho_ten as ho_ten","tai_khoan.email").groupBy("tai_khoan.ho_ten")
   },
   findByNguoiDauGia(id) {
     return db(table)
@@ -27,6 +39,24 @@ module.exports = {
         "trang_thai.ten as ten_status",
         "dau_gia.ngay_dat"
       );
+  },
+  
+  DanhSachSPDauGia(id) {
+    return db(table)
+      .join("san_pham", "dau_gia.id_sp", "san_pham.id_sp")
+      .join("trang_thai", "dau_gia.status", "trang_thai.id")
+      .where({"dau_gia.id_nguoi_dau_gia":id, "status":1})
+      .select(
+        "san_pham.id_sp as id_sp",
+        "san_pham.ten as ten_sp",
+        "san_pham.anh",
+        "san_pham.gia_hien_tai as gia_mua",
+        "dau_gia.status",
+        "trang_thai.ten as ten_status",
+        "dau_gia.ngay_dat",
+	      "dau_gia.id_tra_cao_nhat as cao_nhat"
+      ).max('dau_gia.gia_tra_cao_nhat as gia_tra').groupBy("san_pham.id_sp");
+
   },
   findByStatus(id_nguoi_ban, status) {
     return db(table)
@@ -58,7 +88,7 @@ module.exports = {
         "tai_khoan.ho_ten",
         "dau_gia.gia_khoi_diem as gia_hien_tai"
       )
-      .where({ id_sp: id_sp, status: 1 });
+      .where({ id_sp: id_sp });
   },
   async findDauGiaCaoNhat(id_sp) {
     let max = await db(table)

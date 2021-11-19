@@ -42,6 +42,9 @@ module.exports = {
   findAllBySeller(id_seller){
     return mapProduct().where('id_nguoi_ban', id_seller);
   },
+  findAllBySellerByStatus(id_seller){
+    return mapProduct().where({'id_nguoi_ban': id_seller, "isLocked": 0});
+  },
   findAllKetThuc(){
     return db(table)
     .join("tai_khoan", "san_pham.id_nguoi_ban", "tai_khoan.id_nguoi_dung")

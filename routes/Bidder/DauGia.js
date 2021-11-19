@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
 
 const Authentication = require('../../middlewares/auth');
@@ -12,11 +12,45 @@ const donHangModel = require('../../services/datHangModel');
 const Utils = require('../../utils/Utils');
 const mailer = require('../../utils/mailer');
 
+router.get('/san-pham/dang-tham-gia', [Authentication.requireUser] , async function (req, res) {
+    const id = req.accessTokenPayload.id || 0;
+    let rows = await dauGiaModel.DanhSachSPDauGia(id);
+
+    let arr_rs = []
+
+    for(let i = 0; i < rows.length; i++){
+        let cao_nhat = await dauGiaModel.findDauGiaCaoNhat(rows[i].id_sp);
+        let rs = {
+            ten_sp: rows[i].ten_sp,
+            anh: rows[i].anh,
+            dau_gia: {
+		        cao_nhat: cao_nhat.id_tra_cao_nhat,
+                gia_khoi_diem: rows[i].gia_tra,
+                gia_mua: rows[i].gia_mua,
+            },
+            status: {
+                id: rows[i].status,
+                ten: rows[i].ten_status,
+            },
+            ngay_dat: rows[i].ngay_dat,
+            path: Utils.toPath(rows[i].ten_sp, rows[i].id_sp)
+        };
+        arr_rs.push(rs)
+    }
+
+    return res.status(200).json(arr_rs);
+})
+
+
+
+
 router.post('/tham-gia', [Authentication.requireUser, Authentication.requireDiemDanhGia], async function (req, res) {
     /*
           id_sp,
           gia_dat
       */
+    
+
     const id = req.accessTokenPayload.id || 0;
     const sp_daugia = req.body;
     const id_sp = sp_daugia.id_sp || 0;
@@ -27,12 +61,13 @@ router.post('/tham-gia', [Authentication.requireUser, Authentication.requireDiem
     if (sp.length != 0) {
         sp = sp[0];
     }
-
+    sp.path = Utils.toPath(sp.ten_sp, sp.id_sp)
     let now = new Date(Date.now());
     let expired = new Date(sp.end_date);
 
     /// Quá thời hạn
     if (now > expired) {
+ 	console.log("expired")
         return res.status(400).json({
             messeage: 'your product is expired',
             isWin: false
@@ -41,6 +76,7 @@ router.post('/tham-gia', [Authentication.requireUser, Authentication.requireDiem
 
     /// nguoi ban khong duoc dau gia
     if (id == sp.id_nguoi_ban) {
+	console.log("seller not auction")
         return res.status(400).json({
             messeage: 'seller not auction this product',
             isWin: false
@@ -179,6 +215,7 @@ router.post('/tham-gia', [Authentication.requireUser, Authentication.requireDiem
 
             dau_gia_rs.gia_khoi_diem = dat_gia;
             dau_gia_rs.id_tra_cao_nhat = cao_nhat.id_tra_cao_nhat;
+            await sanPhamModel.updateGiaHT(id_sp, dau_gia_rs.gia_khoi_diem);
             //// khi giá khởi điểm của top ở dưới mức đặt giá
             //// nâng giá khởi điểm
             if (cao_nhat.gia_tra_cao_nhat < dat_gia) {
@@ -186,7 +223,6 @@ router.post('/tham-gia', [Authentication.requireUser, Authentication.requireDiem
                 ////// trường hợp được đấu giá #1
 
                 await dauGiaModel.add(dau_gia_rs);
-                await sanPhamModel.updateGiaHT(id_sp, dau_gia_rs.gia_khoi_diem);
                 //// trùng giá với cao nhất
             } else {
                 dau_gia_rs.status = 2;
@@ -240,7 +276,7 @@ router.post('/tham-gia', [Authentication.requireUser, Authentication.requireDiem
                 to: `${cao_nhat.email}`,
                 subject: 'OnlineAuction11: Chúc Mừng Nhà Vô Địch.',
                 html: `
-                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại ${sp.ten_sp}  Đã Bị đặt giá trên.      
+                Xin chào ${cao_nhat.ho_ten}, Xin Chia Buồn, Sản Phẩm Hiện Tại <a href="http://localhost:3000/san-pham/${sp.path}">${sp.ten_sp}</a>  Đã Bị đặt giá trên.      
                 (Đây là thư tự động vui lòng không phản hồi)
                 `,
             });
